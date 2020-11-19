@@ -12,6 +12,8 @@ export class Bally {
     })
 
     ctx.onClean(() => {
+      mesh.geometry.dispose()
+      mesh.material.dispose()
       ctx.scene.remove(mesh)
     })
 
