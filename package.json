@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "ssl": "local-ssl-proxy --config proxy.config.json",
     "serve": "vue-cli-service serve",
-    "deploy": "git add .; git commit -am \"git backup\"; git push -u origin master",
-    "vercel": "vercel --prod",
-    "dev": "vue-cli-service serve --port $PORT",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "git add .; git commit -am \"git backup\"; git push -u origin master",
+    "dev": "vue-cli-service serve --port $PORT",
+    "ssl": "local-ssl-proxy --config proxy.config.json",
+    "vercel": "vercel --prod"
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "three": "^0.122.0",
     "vue": "^2.6.10",
     "vue-router": "^3.4.9"
   },
@@ -23,6 +24,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "vue-cli-plugin-tailwind": "~1.5.0",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
@@ -44,6 +46,8 @@
   },
   "postcss": {
     "plugins": {
+      "tailwindcss": {},
+      "vue-cli-plugin-tailwind/purgecss": {},
       "autoprefixer": {}
     }
   },

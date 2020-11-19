@@ -33,12 +33,17 @@ class TellerEmitter {
       }
     }
 
+    const reset = () => {
+      Object.keys(eventMap).forEach(cancel)
+    }
+
     return {
       on,
       emit,
 
       off,
-      cancel
+      cancel,
+      reset
     }
   }
 }
@@ -56,8 +61,7 @@ class EN {
     }
   }
 
-  static getUndefined (vm, key) {
-    console.log('access undefinedd', vm, key)
+  static getUndefined () {
   }
   static getParent (vm) {
     return vm.parent
@@ -144,12 +148,12 @@ class MiniEngine {
     })
 
     this.doCleanUp = () => {
-      isAborted = true
       try {
         this.cleanTasks.forEach(e => e())
       } catch (e) {
         console.error(e)
       }
+      isAborted = true
     }
 
     let isPaused = false
@@ -194,65 +198,68 @@ class MiniEngine {
 }
 
 class EffectNode {
-  constructor ({ _id, name = '', type = 'EffectNode', root = false, parent = false, ownLoop = false, ...props } = {}) {
+  constructor ({ _id, name = '', type = 'EffectNode', isRoot = true, parent = false, ownLoop = false, ...props } = {}) {
+    this.isRoot = isRoot
     this.props = props
-    this.type = type
-    this.root = root || this
     this.parent = parent || false
     this._id = _id || EN.genID()
-    this.name = name || this.root === this ? 'Root Node' : 'Sub Node'
+
+    this.type = type
+    this.name = name
+
+    if (this.isRoot) {
+      this.instances = []
+    }
     this.engine = new MiniEngine({ name: this.name })
     this.children = []
     this.events = new TellerEmitter()
-
     let protectedProperties = [
       'root',
       'onLoop',
       'onResize',
-      'onCleanUp',
+      'onClean',
       '_',
       'on',
       'off',
       'cancel',
       'emit'
     ]
-
+    let vm = this
     this.context = new Proxy(this, {
       get: (obj, key) => {
-        // fast access
+        if (key === '_') {
+          return vm
+        }
         if (key === 'root') {
-          return obj.root
+          return vm.root
+        }
+        if (key === 'isRoot') {
+          return vm.isRoot
         }
         if (key === 'onLoop') {
-          return this.engine.onLoop
+          return vm.engine.onLoop
         }
         if (key === 'onResize') {
-          return this.engine.onResize
+          return vm.engine.onResize
         }
-        if (key === 'onCleanUp') {
-          return this.engine.onCleanUp
-        }
-        if (key === '_') {
-          return this
+        if (key === 'onClean') {
+          return vm.engine.onClean
         }
         if (key === 'on') {
-          return this.events.on
+          return vm.events.on
         }
         if (key === 'off') {
-          return this.events.off
+          return vm.events.off
         }
         if (key === 'cancel') {
-          return this.events.cancel
+          return vm.events.cancel
         }
         if (key === 'emit') {
-          return this.events.emit
+          return vm.events.emit
         }
         if (key === 'clean') {
           return () => {
-            let idx = this.root.instances.findIndex(e => e === this.context)
-            let me = this.root.instances[idx]
-            me.engine.doCleanUp()
-            this.root.instances.splice(idx, 1)
+            vm.cleanUpWork()
           }
         }
 
@@ -267,13 +274,6 @@ class EffectNode {
       }
     })
 
-    if (this.isRoot) {
-      this.instances = []
-    }
-
-    if (this.parent) {
-      this.parent.children.push(this.context)
-    }
     this.root.instances.push(this.context)
 
     if (this.isRoot && !ownLoop) {
@@ -282,6 +282,37 @@ class EffectNode {
 
     return this.context
   }
+
+  removeByID ({ _id }) {
+    let node = this.allNodes.find(e => e._id === _id)
+    node.clean()
+  }
+
+  getByID ({ _id }) {
+    let node = this.allNodes.find(e => e._id === _id)
+    return node
+  }
+
+  getRoot () {
+    return this.isRoot ? this : EN.lookupHolder(this, 'isRoot')
+  }
+
+  get root () {
+    return this.getRoot()
+  }
+
+  cleanUpWork () {
+    this.engine.doCleanUp()
+
+    let idx = this.root.instances.findIndex(e => e._id === this._id)
+    this.root.instances.splice(idx, 1)
+    this.events.reset()
+
+    this.children.forEach(kid => {
+      kid.cleanUpWork()
+    })
+  }
+
   tellDown (ev, data) {
     EN.tellKids(this, ev, data)
   }
@@ -292,6 +323,9 @@ class EffectNode {
       this.processAllNodes()
     }
     this.rAFID = requestAnimationFrame(rAF)
+  }
+  stopAll () {
+    cancelAnimationFrame(this.rAFID)
   }
 
   processAllNodes () {
@@ -317,21 +351,20 @@ class EffectNode {
     }
   }
 
-  get isRoot () {
-    return this.root === this
-  }
-
   get allNodes () {
     return this.root.instances
   }
 
   node (props) {
-    let ctx = new EffectNode({ ...props, root: this.root, parent: this })
+    let ctx = new EffectNode({ ...props, isRoot: false, parent: this })
+    this.children.push(ctx)
     return ctx
   }
 }
 
-export { EffectNode }
+export {
+  EffectNode
+}
 
   // class MyBox {
   //   constructor ({ ctx }) {
@@ -341,8 +374,6 @@ export { EffectNode }
   // class MyApp {
   //   constructor () {
   //     this.ctx = new EffectNode({ name: 'Wong Lok', type: 'RenderRoot' })
-
-
   //     new MyBox({ ctx: this.ctx.node(), type: 'MyBox' })
   //   }
   // }
