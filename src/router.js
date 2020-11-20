@@ -9,7 +9,11 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: require('./components/EffectNode/AppPages/Home.vue').default
+      component: require('./components/EffectNode/AppVue/Home.vue').default
+    },
+    {
+      path: '/curves',
+      component: require('./components/EffectNode/AppVue/Curves.vue').default
     },
     // {
     //   path: '/about',

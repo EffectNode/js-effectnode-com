@@ -24,7 +24,7 @@ export class Bally {
     })
 
     ctx.on('fadein', ({ done = () => {} }) => {
-      return anime({
+      anime({
         targets: [mat],
         duration: 1000,
         opacity: 1,
@@ -39,7 +39,7 @@ export class Bally {
     })
 
     ctx.on('fadeout', ({ done = () => {} }) => {
-      return anime({
+      anime({
         targets: [mat],
         duration: 1000,
         opacity: 0,
