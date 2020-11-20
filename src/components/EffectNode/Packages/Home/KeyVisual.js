@@ -12,8 +12,7 @@ import { ClickerBalls } from "../ClickerBalls/ClickerBalls"
 export class KeyVisual {
   constructor ({ el }) {
     // Application Core
-    this.ctx = new EffectNode({ name: 'KeyVisualRenderRoot' })
-    let ctx = this.ctx
+    let ctx = new EffectNode({ name: 'KeyVisualRenderRoot' })
     ctx.el = el
 
     let renderer = new GLRenderer({ ctx })
@@ -29,7 +28,7 @@ export class KeyVisual {
     // Application Packages
     new ClickerBalls({ ctx: ctx.node({ name: 'BallService' }) })
 
-    console.log(ctx.services.BallService)
+    // console.log(ctx.services.BallService)
 
     return ctx
   }
