@@ -18,7 +18,7 @@ export default {
   mounted () {
     let _kv = new KeyVisual({ el: this.$refs.kv1 })
     this.getApp = () => _kv
-    console.log(_kv)
+    console.log(this.getApp())
   },
   beforeDestroy () {
     window.location.reload()

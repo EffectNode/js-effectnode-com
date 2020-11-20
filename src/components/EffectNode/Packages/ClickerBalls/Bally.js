@@ -1,12 +1,12 @@
-import { Mesh, MeshBasicMaterial, SphereBufferGeometry } from "three"
+import { Color, Mesh, MeshBasicMaterial, SphereBufferGeometry } from "three"
 import anime from 'animejs/lib/anime.es.js'
 
 export class Bally {
   constructor ({ ctx, props }) {
     ctx.props = props
 
-    let geo = new SphereBufferGeometry(3, 32, 32)
-    let mat = new MeshBasicMaterial({ wireframe: true, opacity: 0, transparent: true })
+    let geo = new SphereBufferGeometry(1, 32, 32)
+    let mat = new MeshBasicMaterial({ color: new Color('#babaff'), wireframe: true, opacity: 0, transparent: true })
     let mesh = new Mesh(geo, mat)
     ctx.scene.add(mesh)
 
@@ -14,14 +14,17 @@ export class Bally {
       mesh.rotation.y += 0.003
     })
 
+    mesh.position.x = (Math.random() - 0.5) * 10
+    mesh.position.y = (Math.random() - 0.5) * 10
+
     ctx.onClean(() => {
       mesh.geometry.dispose()
       mesh.material.dispose()
       ctx.scene.remove(mesh)
     })
 
-    ctx.fadeIn = ({ done = () => {} }) => {
-      anime({
+    ctx.on('fadein', ({ done = () => {} }) => {
+      return anime({
         targets: [mat],
         duration: 1000,
         opacity: 1,
@@ -33,11 +36,10 @@ export class Bally {
           done()
         }
       })
-    }
-    ctx.fadeIn({ done: () => {} })
+    })
 
-    ctx.fadeOut = ({ done = () => {} }) => {
-      anime({
+    ctx.on('fadeout', ({ done = () => {} }) => {
+      return anime({
         targets: [mat],
         duration: 1000,
         opacity: 0,
@@ -49,6 +51,8 @@ export class Bally {
           done()
         }
       })
-    }
+    })
+
+    return ctx
   }
 }

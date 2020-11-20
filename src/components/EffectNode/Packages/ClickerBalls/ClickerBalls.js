@@ -5,7 +5,7 @@ import { Bally } from "./Bally"
 
 export class ClickerBalls {
   constructor ({ ctx }) {
-    let bucket = new ActionCollection({
+    ctx.bucket = new ActionCollection({
       array: [],
       onMake: (value) => {
         new Bally({
@@ -15,11 +15,18 @@ export class ClickerBalls {
           }),
           props: value
         })
+
+        ctx
+          .getByID({ _id: value._id })
+          .emit('fadein', {
+            done: () => {
+            }
+          })
       },
       onDestroy: (value) => {
         ctx
           .getByID({ _id: value._id })
-          .fadeOut({
+          .emit('fadeout', {
             done: () => {
               ctx.destroyByID({ _id: value._id })
             }
@@ -29,11 +36,11 @@ export class ClickerBalls {
 
     let builder = () => {
       let rID = getID()
-      bucket.add({
+      ctx.bucket.add({
         _id: rID
       })
       setTimeout(() => {
-        bucket.remove({ _id: rID })
+        ctx.bucket.remove({ _id: rID })
       }, 2000)
     }
     ctx.el.onclick = () => {

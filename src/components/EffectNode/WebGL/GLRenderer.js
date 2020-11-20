@@ -4,6 +4,8 @@ import { sRGBEncoding, WebGLRenderer } from "three"
 export class GLRenderer {
   constructor ({ ctx }) {
     ctx.renderer = new WebGLRenderer({
+      alpha: true,
+      antialias: true,
       outputEncoding: sRGBEncoding
     })
 
