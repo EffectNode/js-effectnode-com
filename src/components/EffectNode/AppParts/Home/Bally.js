@@ -16,7 +16,5 @@ export class Bally {
       mesh.material.dispose()
       ctx.scene.remove(mesh)
     })
-
-    return ctx
   }
 }

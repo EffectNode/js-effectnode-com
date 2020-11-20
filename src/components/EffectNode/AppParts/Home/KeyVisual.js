@@ -1,6 +1,6 @@
 import { Scene } from "three"
 import { ActionArray } from "../../Core/ActionArray"
-import { EffectNode } from "../../Core/EffectNode"
+import { EffectNode, genID, getID } from "../../Core/EffectNode"
 import { GLRenderer } from "../../Stack/GLRenderer"
 import { PCamera } from "../../Stack/PCamera"
 
@@ -23,35 +23,24 @@ export class KeyVisual {
     })
 
     let manager = new ActionArray({
-      array: []
-    })
-
-    manager.onBuild((value) => {
-      new Bally({ ctx: ctx.node({ _id: value._id, name: 'Bally1' }) })
-    })
-    manager.onDetach((value) => {
-      ctx.removeByID({ _id: value._id })
-    })
-    manager.onPatch(({ before, after }) => {
-      if (after._id === before._id) {
-        console.log('123')
-        let current = ctx.getByID({ _id: before._id })
-        if (current) {
-          current.events.emit('update-data', { before, after })
-        }
-      } else {
-        ctx.removeByID({ _id: before._id })
-        new Bally({ ctx: ctx.node({ _id: after._id, name: 'Bally1' }) })
+      array: [
+        { _id: getID() }
+      ],
+      onAttach: (value) => {
+        new Bally({ ctx: ctx.node({ _id: value._id, name: 'Bally1' }) })
+      },
+      onDetach: (value) => {
+        ctx.removeByID({ _id: value._id })
       }
     })
 
     el.onclick = () => {
-      manager.push({
-        _id: 'ball1'
+      let rID = genID()
+      manager.add({
+        _id: rID
       })
-      let idx = manager.findIndex(e => e._id === 'ball1')
       setTimeout(() => {
-        manager.splice(idx, 1)
+        manager.remove({ _id: rID })
       }, 1000)
     }
   }

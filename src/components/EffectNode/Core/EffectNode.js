@@ -14,7 +14,6 @@ class EN {
       }
     }
   }
-
   static getUndefined () {
   }
   static getParent (vm) {
@@ -68,9 +67,13 @@ class EN {
   }
 }
 
+export const genID = EN.genID
+export const getID = EN.genID
+
 class EffectNode {
-  constructor ({ _id, name = '', type = 'EffectNode', isRoot = true, parent = false, ownLoop = false, ...props } = {}) {
+  constructor ({ _id, name = '', root = false, type = 'EffectNode', isRoot = true, parent = false, ownLoop = false, ...props } = {}) {
     this.isRoot = isRoot
+    this.root = root || this
     this.props = props
     this.parent = parent || false
     this._id = _id || EN.genID()
@@ -155,21 +158,14 @@ class EffectNode {
   }
 
   removeByID ({ _id }) {
-    let node = this.allNodes.find(e => e._id === _id)
+    let node = this.getByID({ _id })
     node.clean()
+    console.log(_id, this.root.instances)
   }
 
   getByID ({ _id }) {
-    let node = this.allNodes.find(e => e._id === _id)
+    let node = this.root.instances.find(e => e._id === _id)
     return node
-  }
-
-  getRoot () {
-    return this.isRoot ? this : EN.lookupHolder(this, 'isRoot')
-  }
-
-  get root () {
-    return this.getRoot()
   }
 
   cleanUpWork () {
@@ -222,12 +218,8 @@ class EffectNode {
     }
   }
 
-  get allNodes () {
-    return this.root.instances
-  }
-
   node (props) {
-    let ctx = new EffectNode({ ...props, isRoot: false, parent: this })
+    let ctx = new EffectNode({ ...props, isRoot: false, root: this.root, parent: this })
     this.children.push(ctx)
     return ctx
   }
