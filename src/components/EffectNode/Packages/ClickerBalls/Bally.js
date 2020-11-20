@@ -1,7 +1,9 @@
 import { Mesh, MeshBasicMaterial, SphereBufferGeometry } from "three"
 
 export class Bally {
-  constructor ({ ctx }) {
+  constructor ({ ctx, props }) {
+    this.props = props
+
     let geo = new SphereBufferGeometry(3, 32, 32)
     let mat = new MeshBasicMaterial({ wireframe: true })
     let mesh = new Mesh(geo, mat)

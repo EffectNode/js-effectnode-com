@@ -71,15 +71,15 @@ export const genID = EN.genID
 export const getID = EN.genID
 
 class EffectNode {
-  constructor ({ _id, name = '', root = false, type = 'EffectNode', isRoot = true, parent = false, ownLoop = false, ...props } = {}) {
+  constructor ({ _id, name, root = false, type, isRoot = true, parent = false, ownLoop = false, ...props } = {}) {
+    this.type = type || isRoot ? 'RootNode' : 'Node'
+    this.name = name || this.type + this._id
     this.isRoot = isRoot
     this.root = root || this
     this.props = props
     this.parent = parent || false
     this._id = _id || EN.genID()
 
-    this.type = type
-    this.name = name
 
     if (this.isRoot) {
       this.instances = []
@@ -99,10 +99,24 @@ class EffectNode {
       'emit'
     ]
     let vm = this
-    this.context = new Proxy(this, {
+
+    this.services = new Proxy({}, {
+      get: (obj, key) => {
+        return this.getByName({ name: key })
+      },
+      set: () => {
+        console.warn('ref is for read only')
+        return true
+      }
+    })
+
+    this.contextAPI = new Proxy(this, {
       get: (obj, key) => {
         if (key === '_') {
           return vm
+        }
+        if (key === 'services') {
+          return this.services
         }
         if (key === 'root') {
           return vm.root
@@ -131,9 +145,13 @@ class EffectNode {
         if (key === 'emit') {
           return vm.events.emit
         }
-        if (key === 'clean') {
+        if (key === 'destroy') {
           return () => {
+            if (vm.destroyed) {
+              return
+            }
             vm.cleanUpWork()
+            vm.destroyed = true
           }
         }
 
@@ -148,24 +166,35 @@ class EffectNode {
       }
     })
 
-    this.root.instances.push(this.context)
+    this.root.instances.push(this.contextAPI)
 
     if (this.isRoot && !ownLoop) {
       this.startAll()
     }
 
-    return this.context
+    return this.contextAPI
   }
 
-  removeByID ({ _id }) {
+  destroyByID ({ _id }) {
     let node = this.getByID({ _id })
-    node.clean()
-    console.log(_id, this.root.instances)
+    if (node) {
+      node.destroy()
+    }
   }
 
   getByID ({ _id }) {
     let node = this.root.instances.find(e => e._id === _id)
     return node
+  }
+
+  getByName ({ name }) {
+    let node = this.root.instances.find(e => e.name === name)
+    return node
+  }
+
+  getByType ({ type }) {
+    let nodes = this.root.instances.filter(e => e.type === type)
+    return nodes
   }
 
   cleanUpWork () {
@@ -229,16 +258,16 @@ export {
   EffectNode
 }
 
-  // class MyBox {
-  //   constructor ({ ctx }) {
-  //     ctx.me = this
-  //   }
-  // }
-  // class MyApp {
-  //   constructor () {
-  //     this.ctx = new EffectNode({ name: 'Wong Lok', type: 'RenderRoot' })
-  //     new MyBox({ ctx: this.ctx.node(), type: 'MyBox' })
-  //   }
-  // }
+// class MyBox {
+//   constructor ({ ctx }) {
+//     ctx.me = this
+//   }
+// }
+// class MyApp {
+//   constructor () {
+//     this.ctx = new EffectNode({ name: 'Wong Lok', type: 'RenderRoot' })
+//     new MyBox({ ctx: this.ctx.node(), type: 'MyBox' })
+//   }
+// }
 
-  // new MyApp()
+// new MyApp()

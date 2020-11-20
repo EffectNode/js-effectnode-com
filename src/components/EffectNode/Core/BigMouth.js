@@ -32,7 +32,9 @@ export class BigMouth {
     }
 
     const reset = () => {
-      Object.keys(eventMap).forEach(cancel)
+      Object.keys(eventMap).forEach((kn) => {
+        cancel(kn)
+      })
     }
 
     return {
