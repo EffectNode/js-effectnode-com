@@ -12,13 +12,13 @@ import { ClickerBalls } from "../ClickerBalls/ClickerBalls"
 export class KeyVisual {
   constructor ({ el }) {
     // Application Core
-    this.ctx = new EffectNode({ name: 'KeyVisual' })
+    this.ctx = new EffectNode({ name: 'KeyVisualRenderRoot' })
     let ctx = this.ctx
     ctx.el = el
 
     let renderer = new GLRenderer({ ctx })
     let camera = new PCamera({ ctx })
-    camera.position.z = 12
+    camera.position.z = 10
 
     let scene = ctx.scene = new Scene()
 
@@ -31,6 +31,6 @@ export class KeyVisual {
 
     console.log(ctx.services.BallService)
 
-    return this.ctx
+    return ctx
   }
 }

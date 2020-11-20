@@ -11,6 +11,7 @@ export class PCamera {
     ctx.onResize(() => {
       ctx.rect = el.getBoundingClientRect()
       ctx.aspectRatio = ctx.rect.width / ctx.rect.height
+      camera.aspect = ctx.aspectRatio
       camera.updateProjectionMatrix()
     })
 
