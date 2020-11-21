@@ -461,7 +461,7 @@ export class Swimmers {
     let getLineMat = () => {
       return new THREE.RawShaderMaterial({
         uniforms: {
-          baseColor: { value: new Color('#355829') },
+          baseColor: { value: new Color('#fafafa') },
           time: { value: 0 },
           linearProgress: { value: 0 }
         },
@@ -486,7 +486,7 @@ export class Swimmers {
     let getBallMat = () => {
       return new THREE.ShaderMaterial({
         uniforms: {
-          baseColor: { value: new Color('#355829') },
+          baseColor: { value: new Color('#fafafa') },
           time: { value: 0 },
           linearProgress: { value: 0 }
         },
@@ -535,6 +535,9 @@ export class Swimmers {
     // ctx.scene.add(lanCurve)
     lanCurve.userData.bloom = true
     lanBall.userData.bloom = true
+
+    this.lanCurve.userData.bloom = true
+    this.lanBall.userData.bloom = true
 
     this.group.add(this.lanCurve)
     this.group.add(this.lanBall)
@@ -633,8 +636,8 @@ class LanLanGeoSpecial {
 
         // copy over the UV for this vertex
         uvs.push(faceUvs[j].toArray());
-      });
-    });
+      })
+    })
 
     // build typed arrays for our attributes
     const posArray = new Float32Array(xPositions);
@@ -650,6 +653,7 @@ class LanLanGeoSpecial {
 
     const lineGeo = new THREE.InstancedBufferGeometry()
     lineGeo.instanceCount = count
+
     lineGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 1))
     lineGeo.setAttribute('angle', new THREE.BufferAttribute(angleArray, 1))
     lineGeo.setAttribute('uv', new THREE.BufferAttribute(uvArray, 2))
@@ -712,3 +716,4 @@ class LanLanGeoSpecial {
     }
   }
 }
+//

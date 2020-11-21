@@ -9,23 +9,21 @@ import { PCamera } from "../../WebGL/PCamera"
 // Application Packages
 import { Swimmers } from "./Swimmers.js"
 import { GLOrbit } from "../../WebGL/GLOribt"
+import { GLBloom } from "../../WebGL/GLBloom"
 
 export class SwimmersCanvas {
   constructor ({ el }) {
     // Application Core
     let ctx = new EffectNode({ name: 'SwimmersCanvasRenderRoot' })
+    ctx.link(this)
     ctx.el = el
 
-    let renderer = new GLRenderer({ ctx })
+    new GLRenderer({ ctx })
     let camera = new PCamera({ ctx })
     camera.position.z = 20
 
     let scene = ctx.scene = new Scene()
-    scene.background = new Color('#8FB14E').offsetHSL(0, 0.3, 0.2)
-
-    ctx.onLoop(() => {
-      renderer.render(scene, camera)
-    })
+    scene.background = new Color('#232323')
 
     new GLOrbit({ ctx: ctx.node({ name: 'GLOrbitService' }) })
 
@@ -35,8 +33,12 @@ export class SwimmersCanvas {
     //   curves.destroy()
     // }, 1000)
 
-    // console.log(ctx.services.CurveService)
+    let bloom = new GLBloom({ ctx: ctx.node({ name: 'GLBloomService' }) })
 
-    return ctx
+    ctx.onLoop(() => {
+      bloom.selectiveBloom()
+    })
+
+    console.log(ctx.names.GLBloomService)
   }
 }

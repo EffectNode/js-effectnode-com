@@ -2,6 +2,7 @@ import { PerspectiveCamera } from "three"
 
 export class PCamera {
   constructor ({ ctx }) {
+    ctx.link(this)
     let el = ctx.el
     ctx.rect = el.getBoundingClientRect()
     ctx.aspectRatio = ctx.rect.width / ctx.rect.height

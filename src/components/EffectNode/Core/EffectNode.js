@@ -118,6 +118,9 @@ class EffectNode {
         if (key === 'services') {
           return this.services
         }
+        if (key === 'names') {
+          return this.services
+        }
         if (key === 'root') {
           return vm.root
         }
@@ -173,6 +176,10 @@ class EffectNode {
     }
 
     return this.contextAPI
+  }
+
+  link (object) {
+    object.__proto__ = this.contextAPI
   }
 
   destroyByID ({ _id }) {
