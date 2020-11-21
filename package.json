@@ -12,6 +12,7 @@
     "vercel": "vercel --prod"
   },
   "dependencies": {
+    "@tweenjs/tween.js": "tweenjs/tween.js",
     "animejs": "^3.2.1",
     "core-js": "^2.6.5",
     "dat.gui": "^0.7.7",

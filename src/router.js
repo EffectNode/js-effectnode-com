@@ -8,12 +8,20 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/balls',
       component: require('./components/EffectNode/AppVue/Home.vue').default
     },
     {
       path: '/curves',
       component: require('./components/EffectNode/AppVue/Curves.vue').default
+    },
+    {
+      path: '/baller',
+      component: require('./components/EffectNode/AppVue/Baller.vue').default
+    },
+    {
+      path: '/',
+      component: require('./components/EffectNode/AppVue/Baller.vue').default
     },
     // {
     //   path: '/about',
