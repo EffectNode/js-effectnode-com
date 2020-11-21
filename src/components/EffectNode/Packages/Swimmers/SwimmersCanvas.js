@@ -13,7 +13,6 @@ import { Swimmers } from "./Swimmers.js"
 export class SwimmersCanvas extends EffectNode {
   constructor ({ el }) {
     super()
-    // this.logging = true
 
     // Application
     let ctx = this
@@ -37,8 +36,12 @@ export class SwimmersCanvas extends EffectNode {
       this.bloom.renderSelectiveBloom()
     })
 
+    // Optimizer
+    // this.logging = true
     // console.log(this.internals)
-    // console.log(this.nmes.Swimmers)
+
+    // Advanced
+    // console.log(this.names.Swimmers)
   }
 }
 

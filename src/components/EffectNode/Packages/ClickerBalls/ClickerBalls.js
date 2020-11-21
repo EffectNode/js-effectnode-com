@@ -48,7 +48,5 @@ export class ClickerBalls {
     }
 
     builder()
-
-    return ctx
   }
 }

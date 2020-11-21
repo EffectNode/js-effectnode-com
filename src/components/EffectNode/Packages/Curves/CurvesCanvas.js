@@ -13,10 +13,12 @@ export class CurvesCanvas {
   constructor ({ el }) {
     // Application Core
     let ctx = new EffectNode({ name: 'CurvesCanvasRenderRoot' })
+    this.ctx = ctx
+
     ctx.el = el
 
-    let renderer = new GLRenderer({ ctx })
-    let camera = new GLCamera({ ctx })
+    let renderer = ctx.global.renderer = new GLRenderer({ ctx })
+    let camera = ctx.global.camera = new GLCamera({ ctx })
     camera.position.z = 10
 
     let scene = ctx.scene = new Scene()
@@ -32,7 +34,5 @@ export class CurvesCanvas {
     // }, 1000)
 
     // console.log(ctx.services.CurveService)
-
-    return ctx
   }
 }

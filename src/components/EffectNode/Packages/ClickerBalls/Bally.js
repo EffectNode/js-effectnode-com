@@ -3,7 +3,8 @@ import anime from 'animejs/lib/anime.es.js'
 
 export class Bally {
   constructor ({ ctx, props }) {
-    ctx.props = props
+    this.ctx = ctx
+    this.props = props
 
     let geo = new SphereBufferGeometry(1, 32, 32)
     let mat = new MeshBasicMaterial({ color: new Color('#babaff'), wireframe: true, opacity: 0, transparent: true })
@@ -52,7 +53,5 @@ export class Bally {
         }
       })
     })
-
-    return ctx
   }
 }

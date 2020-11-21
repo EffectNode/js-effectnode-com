@@ -14,6 +14,7 @@ export class KeyVisual {
     // Application Core
     let ctx = new EffectNode({ name: 'KeyVisualRenderRoot' })
     ctx.el = el
+    this.ctx = ctx
 
     let renderer = new GLRenderer({ ctx })
     let camera = new GLCamera({ ctx })
@@ -29,7 +30,5 @@ export class KeyVisual {
     new ClickerBalls({ ctx: ctx.node({ name: 'BallService' }) })
 
     // console.log(ctx.services.BallService)
-
-    return ctx
   }
 }

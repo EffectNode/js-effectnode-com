@@ -303,8 +303,6 @@ export class Curves {
 
       new Editor({ ctx, getArr, setArr })
     }
-
-    return ctx
   }
 }
 

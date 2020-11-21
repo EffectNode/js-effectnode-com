@@ -128,8 +128,12 @@ class EffectNode {
         }
 
         if (key === 'global') {
-          return vm.root.contextAPI
+          return vm.root
         }
+        if (key === 'root') {
+          return vm.root
+        }
+
         if (key === 'isRoot') {
           return vm.isRoot
         }
@@ -165,7 +169,9 @@ class EffectNode {
           console.warn('protected read only properites', key)
           return false
         }
-        console.log(`${this.name}:: ctx.${key} = `, val)
+        if (this.isRoot) {
+          console.log(`ctx.global.${key} = `, val)
+        }
         return Reflect.set(obj, key, val, receiver)
       }
     })
