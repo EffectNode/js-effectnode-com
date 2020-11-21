@@ -75,7 +75,7 @@ export class Baller {
     this.segments = 30
     this.ctrlPts = 4
 
-    this.duration = 4.125
+    this.duration = 4.125 * 7
 
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
