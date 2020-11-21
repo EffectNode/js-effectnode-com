@@ -71,15 +71,14 @@ export const genID = EN.genID
 export const getID = EN.genID
 
 class EffectNode {
-  constructor ({ _id, name, root = false, type, isRoot = true, parent = false, ownLoop = false, ...props } = {}) {
+  constructor ({ _id, name, root = false, type, isRoot = true, parent = false, ownLoop = false } = {}) {
+    this._id = _id || EN.genID()
     this.type = type || isRoot ? 'RootNode' : 'Node'
     this.name = name || this.type + this._id
     this.isRoot = isRoot
     this.root = root || this
-    this.props = props
     this.parent = parent || false
-    this._id = _id || EN.genID()
-
+    this.userData = {}
 
     if (this.isRoot) {
       this.instances = []
@@ -100,29 +99,31 @@ class EffectNode {
     ]
     let vm = this
 
-    this.services = new Proxy({}, {
-      get: (obj, key) => {
-        return this.getByName({ name: key })
-      },
-      set: () => {
-        console.warn('ref is for read only')
-        return true
-      }
-    })
+    // this.services = new Proxy({}, {
+    //   get: (obj, key) => {
+    //     return this.getByName({ name: key })
+    //   },
+    //   set: () => {
+    //     console.warn('ref is for read only')
+    //     return true
+    //   }
+    // })
 
     this.contextAPI = new Proxy(this, {
       get: (obj, key) => {
         if (key === '_') {
           return vm
         }
-        if (key === 'services') {
-          return this.services
-        }
-        if (key === 'names') {
-          return this.services
-        }
-        if (key === 'root') {
-          return vm.root
+
+        // if (key === 'services') {
+        //   return this.services
+        // }
+        // if (key === 'names') {
+        //   return this.services
+        // }
+
+        if (key === 'global') {
+          return vm.root.contextAPI
         }
         if (key === 'isRoot') {
           return vm.isRoot
@@ -163,8 +164,9 @@ class EffectNode {
       set: (obj, key, val, receiver) => {
         if (protectedProperties.includes(key)) {
           console.warn('protected read only properites', key)
-          return true
+          return false
         }
+        console.log('Setting', key, val)
         return Reflect.set(obj, key, val, receiver)
       }
     })
@@ -179,7 +181,9 @@ class EffectNode {
   }
 
   link (object) {
-    object.__proto__ = this.contextAPI
+    let grandParent = object.__proto__.__proto__
+    object.__proto__ = this.node({ type: object.constructor.name })
+    object.__proto__.__proto__ = grandParent
   }
 
   destroyByID ({ _id }) {
@@ -205,6 +209,7 @@ class EffectNode {
   }
 
   cleanUpWork () {
+    console.log('destroy', this.name, this.type)
     this.engine.doCleanUp()
 
     let idx = this.root.instances.findIndex(e => e._id === this._id)

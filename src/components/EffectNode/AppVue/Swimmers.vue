@@ -21,10 +21,9 @@ export default {
   mounted () {
     let _kv = new SwimmersCanvas({ el: this.$refs.kv1 })
     this.getApp = () => _kv
-    console.log(this.getApp())
   },
   beforeDestroy () {
-    window.location.reload()
+    this.getApp().destroy()
   }
 }
 </script>

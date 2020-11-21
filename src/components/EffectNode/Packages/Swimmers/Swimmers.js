@@ -63,7 +63,6 @@ export class LanGUI {
 export class Swimmers {
   constructor ({ ctx }) {
     this.group = new THREE.Object3D()
-    // ctx.scene.background = new THREE.Color('#000000')
 
     this.howMany = 500
     // this.infoMap = new Map()

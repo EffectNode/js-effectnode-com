@@ -2,17 +2,17 @@ import { PerspectiveCamera } from "three"
 
 export class PCamera {
   constructor ({ ctx }) {
-    ctx.link(this)
     let el = ctx.el
-    ctx.rect = el.getBoundingClientRect()
-    ctx.aspectRatio = ctx.rect.width / ctx.rect.height
 
-    let camera = ctx.camera = new PerspectiveCamera(65, ctx.aspectRatio, 0.0000001, 10000000.0)
+    this.rect = el.getBoundingClientRect()
+    this.aspectRatio = this.rect.width / this.rect.height
+
+    let camera = new PerspectiveCamera(65, this.aspectRatio, 0.0000001, 10000000.0)
 
     ctx.onResize(() => {
-      ctx.rect = el.getBoundingClientRect()
-      ctx.aspectRatio = ctx.rect.width / ctx.rect.height
-      camera.aspect = ctx.aspectRatio
+      this.rect = el.getBoundingClientRect()
+      this.aspectRatio = this.rect.width / this.rect.height
+      camera.aspect = this.aspectRatio
       camera.updateProjectionMatrix()
     })
 

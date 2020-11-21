@@ -1,44 +1,39 @@
-// Core Code
-import { EffectNode } from "../../Core/EffectNode"
+import { Color, Scene } from "three"
 
 // Stack
-import { Color, Scene } from "three"
-import { GLRenderer } from "../../WebGL/GLRenderer"
+import { EffectNode } from "../../Core/EffectNode"
 import { PCamera } from "../../WebGL/PCamera"
-
-// Application Packages
-import { Swimmers } from "./Swimmers.js"
 import { GLOrbit } from "../../WebGL/GLOribt"
 import { GLBloom } from "../../WebGL/GLBloom"
+import { GLRenderer } from "../../WebGL/GLRenderer"
 
-export class SwimmersCanvas {
-  constructor ({ el }) {
-    // Application Core
-    let ctx = new EffectNode({ name: 'SwimmersCanvasRenderRoot' })
-    ctx.link(this)
-    ctx.el = el
+// Application
+import { Swimmers } from "./Swimmers.js"
 
-    new GLRenderer({ ctx })
-    let camera = new PCamera({ ctx })
-    camera.position.z = 20
+export class SwimmersCanvas extends EffectNode {
+  constructor ({ el, ...props }) {
+    super(props)
+    // Application
+    let ctx = this
 
-    let scene = ctx.scene = new Scene()
-    scene.background = new Color('#232323')
+    // root context
+    this.el = el
+    this.renderer = new GLRenderer({ ctx })
+    this.camera = new PCamera({ ctx })
+    this.camera.position.z = 20
 
-    new GLOrbit({ ctx: ctx.node({ name: 'GLOrbitService' }) })
+    this.scene = new Scene()
+    this.scene.background = new Color('#232323')
 
-    // Application Packages
-    new Swimmers({ ctx: ctx.node({ name: 'SwimmersService' }) })
-    // setTimeout(() => {
-    //   curves.destroy()
-    // }, 1000)
+    this.bloom = new GLBloom({ ctx })
+    this.orbit = new GLOrbit({ ctx })
 
-    let bloom = new GLBloom({ ctx: ctx.node({ name: 'GLBloomService' }) })
+    new Swimmers({ ctx })
 
-    ctx.onLoop(() => {
-      bloom.selectiveBloom()
+    this.onLoop(() => {
+      this.bloom.selectiveBloom()
     })
 
-    console.log(ctx.names.GLBloomService)
+    console.log(this.root.instances.map(e => e._))
   }
 }
