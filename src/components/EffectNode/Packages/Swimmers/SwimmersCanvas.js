@@ -2,7 +2,7 @@ import { Color, Scene } from "three"
 
 // Stack
 import { EffectNode } from "../../Core/EffectNode"
-import { PCamera } from "../../WebGL/PCamera"
+import { GLCamera } from "../../WebGL/GLCamera"
 import { GLOrbit } from "../../WebGL/GLOribt"
 import { GLBloom } from "../../WebGL/GLBloom"
 import { GLRenderer } from "../../WebGL/GLRenderer"
@@ -11,15 +11,16 @@ import { GLRenderer } from "../../WebGL/GLRenderer"
 import { Swimmers } from "./Swimmers.js"
 
 export class SwimmersCanvas extends EffectNode {
-  constructor ({ el, ...props }) {
-    super(props)
+  constructor ({ el }) {
+    super()
+
     // Application
     let ctx = this
 
-    // root context
+    // App Global Resources
     this.el = el
     this.renderer = new GLRenderer({ ctx })
-    this.camera = new PCamera({ ctx })
+    this.camera = new GLCamera({ ctx })
     this.camera.position.z = 20
 
     this.scene = new Scene()
@@ -34,6 +35,6 @@ export class SwimmersCanvas extends EffectNode {
       this.bloom.selectiveBloom()
     })
 
-    console.log(this.root.instances.map(e => e._))
+    console.log(this.instances.map(e => e._))
   }
 }

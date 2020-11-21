@@ -3,8 +3,6 @@ import { MeshStandardMaterial } from 'three';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 export class GLBloom {
   constructor ({ ctx }) {
-
-
     var params = {
       starBloomBase: 1.5,
 

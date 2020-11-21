@@ -182,12 +182,6 @@ class EffectNode {
     this.destroyed = true
   }
 
-  link (object) {
-    let grandParent = object.__proto__.__proto__
-    object.__proto__ = this.node({ type: object.constructor.name })
-    object.__proto__.__proto__ = grandParent
-  }
-
   destroyByID ({ _id }) {
     let node = this.getByID({ _id })
     if (node) {

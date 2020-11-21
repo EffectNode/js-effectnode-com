@@ -676,17 +676,6 @@ class LanLanGeoSpecial {
     }
     lineGeo.setAttribute('offset', new THREE.InstancedBufferAttribute(new Float32Array( offsets ), 3));
 
-    // this.parent.controlPoint0
-    // this.parent.controlPoint1
-    // this.parent.controlPoint2
-    // this.parent.controlPoint3
-    // this.parent.controlPoint4
-    // this.parent.controlPoint5
-    // this.parent.controlPoint6
-    // this.parent.controlPoint7
-
-    // dispose old lineGeo since we no longer need it
-    baseGeometry.dispose();
 
     // let ballBaseGeo = new THREE.SphereBufferGeometry(0.025, 32, 32)
     // ballBaseGeo = new THREE.BoxBufferGeometry(0.03, 0.03, 0.03, 1.0, 1.0, 1.0)
@@ -707,6 +696,7 @@ class LanLanGeoSpecial {
     ctx.onClean(() => {
       lineGeo.dispose()
       ballGeo.dispose()
+      baseGeometry.dispose()
     })
 
     return {

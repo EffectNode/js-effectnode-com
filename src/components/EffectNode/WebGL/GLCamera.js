@@ -1,6 +1,6 @@
 import { PerspectiveCamera } from "three"
 
-export class PCamera {
+export class GLCamera {
   constructor ({ ctx }) {
     let el = ctx.el
 
