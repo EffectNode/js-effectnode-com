@@ -75,7 +75,7 @@ export class Baller {
     this.segments = 30
     this.ctrlPts = 4
 
-    this.duration = 4.125 * 10.0
+    this.duration = 4.125
 
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
@@ -583,7 +583,7 @@ export class Baller {
         loopComplete: () => {
           setTimeout(() => {
             animes['linear'].play()
-          }, 2000)
+          }, 1000)
         }
       })
     })
