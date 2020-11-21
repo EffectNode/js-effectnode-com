@@ -3,7 +3,7 @@ import { sRGBEncoding, WebGLRenderer } from "three"
 
 export class GLRenderer {
   constructor ({ ctx }) {
-    ctx.renderer = new WebGLRenderer({
+    let renderer = ctx.renderer = new WebGLRenderer({
       alpha: true,
       antialias: true,
       outputEncoding: sRGBEncoding
@@ -15,15 +15,17 @@ export class GLRenderer {
     ctx.onResize(() => {
       ctx.rect = el.getBoundingClientRect()
       ctx.aspect = ctx.rect.width / ctx.rect.height
-      ctx.renderer.setSize(ctx.rect.width, ctx.rect.height)
+      renderer.setSize(ctx.rect.width, ctx.rect.height)
+      let dpi = window.devicePixelRatio || 1.0
+      renderer.setPixelRatio(dpi)
     })
 
-    el.appendChild(ctx.renderer.domElement)
+    el.appendChild(renderer.domElement)
     ctx.onClean(() => {
-      let dom = ctx.renderer.domElement
+      let dom = renderer.domElement
       dom.parentNode.removeChild(dom)
     })
 
-    return ctx.renderer
+    return renderer
   }
 }

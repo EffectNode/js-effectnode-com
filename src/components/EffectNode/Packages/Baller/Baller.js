@@ -94,8 +94,8 @@ export class Baller {
 
     let sine = each => Math.sin(each * Math.PI * 2.0)
     let cosine = each => Math.cos(each * Math.PI * 2.0)
-    let radius = each => 10 + each * 45
     let randSize = () => 2.3 * (Math.random() - 0.5)
+    let radius = each => 10 + each * 45 + randSize()
 
     for (let eachLine = 0; eachLine < count; eachLine++) {
       for (let i = 0; i < ctrlPts; i++) {
