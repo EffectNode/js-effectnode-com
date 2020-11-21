@@ -13,7 +13,7 @@ import { Swimmers } from "./Swimmers.js"
 export class SwimmersCanvas extends EffectNode {
   constructor ({ el }) {
     super()
-    // this.debug = true
+    this.debug = true
 
     // Application
     let ctx = this
@@ -27,10 +27,10 @@ export class SwimmersCanvas extends EffectNode {
     this.scene = new Scene()
     this.scene.background = new Color('#232323')
 
-    this.bloom = new GLBloom({ ctx })
+    this.bloom = new GLBloom({ ctx: ctx.node({ name: 'Bloom' }) })
     this.orbit = new GLOrbit({ ctx })
 
-    new Swimmers({ ctx })
+    new Swimmers({ ctx: ctx.node({ name: 'Swimmers' }) })
 
     this.bloom.ctx.onLoop(() => {
       this.bloom.selectiveBloom()
