@@ -23,6 +23,7 @@ export default {
     this.getApp = () => _kv
   },
   beforeDestroy () {
+    console.clear()
     this.getApp().destroy()
   }
 }

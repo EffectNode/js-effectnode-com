@@ -27,16 +27,21 @@ export class SwimmersCanvas extends EffectNode {
     this.scene = new Scene()
     this.scene.background = new Color('#232323')
 
-    this.bloom = new GLBloom({ ctx: ctx.node({ name: 'Bloom' }) })
+    this.bloom = new GLBloom({ ctx: ctx.node({ name: 'bloomer' }) })
     this.orbit = new GLOrbit({ ctx })
 
     new Swimmers({ ctx: ctx.node({ name: 'Swimmers' }) })
 
-    this.bloom.ctx.onLoop(() => {
-      this.bloom.selectiveBloom()
+    // custom render
+    ctx.services.bloomer.onLoop(() => {
+      this.bloom.renderSelectiveBloom()
     })
 
-    console.log(this.internal)
-    console.log(this.names)
+    // console.log(this.internals)
+    // console.log(this.nmes.Swimmers)
   }
 }
+
+// context
+// instnace managment (like vuejs and reactjs but in vanilla & clean code)
+//

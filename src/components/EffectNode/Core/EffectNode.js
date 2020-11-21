@@ -123,7 +123,7 @@ class EffectNode {
         if (key === 'names') {
           return this.root.services
         }
-        if (key === 'internal') {
+        if (key === 'internals') {
           return this.instances.map(e => e._)
         }
 
@@ -165,7 +165,7 @@ class EffectNode {
           console.warn('protected read only properites', key)
           return false
         }
-        console.log(`ctx.global.${key} = `, val)
+        console.log(`${this.name}:: ctx.${key} = `, val)
         return Reflect.set(obj, key, val, receiver)
       }
     })

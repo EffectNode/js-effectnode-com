@@ -123,7 +123,7 @@ export class GLBloom {
       // }
     }
 
-    this.selectiveBloom = () => {
+    this.renderSelectiveBloom = () => {
       renderer.setRenderTarget(null)
       // animation code (make the model move)
       renderer.clearDepth()

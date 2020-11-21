@@ -5,7 +5,7 @@ import { Bally } from "./Bally"
 
 export class ClickerBalls {
   constructor ({ ctx }) {
-    ctx.bucket = new ActionCollection({
+    this.bucket = new ActionCollection({
       array: [],
       onMake: (value) => {
         new Bally({
@@ -36,11 +36,11 @@ export class ClickerBalls {
 
     let builder = () => {
       let rID = getID()
-      ctx.bucket.add({
+      this.bucket.add({
         _id: rID
       })
       setTimeout(() => {
-        ctx.bucket.remove({ _id: rID })
+        this.bucket.remove({ _id: rID })
       }, 2000)
     }
     ctx.el.onclick = () => {
