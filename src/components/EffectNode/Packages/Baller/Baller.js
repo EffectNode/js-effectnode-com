@@ -67,15 +67,16 @@ export class Baller {
     this.group = new THREE.Object3D()
     // ctx.scene.background = new THREE.Color('#000000')
 
-    this.howMany = 500
+    this.howMany = 750
     // this.infoMap = new Map()
     this.meshMap = new Map()
 
     this.cylinderSides = 3
     this.segments = 30
-    this.ctrlPts = 4
+    this.ctrlPts = 8
 
-    this.duration = 4.125 * 7
+    this.delayRestart = 0
+    this.duration = 4.125
 
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
@@ -94,18 +95,19 @@ export class Baller {
 
     let sine = each => Math.sin(each * Math.PI * 2.0)
     let cosine = each => Math.cos(each * Math.PI * 2.0)
-    let randSize = () => 3 * (Math.random() - 0.5)
-    let radius = each => 7 + each * 25 + randSize()
+    let rVal = () => 1.5 * (Math.random() - 0.5)
+    let radius = each => 7 + each * 25 + rVal() * sine(each) * cosine(each)
 
     for (let eachLine = 0; eachLine < count; eachLine++) {
       for (let i = 0; i < ctrlPts; i++) {
-        let ee = (eachLine / count)
-        let cp = ((i / ctrlPts))
-        let xx = radius(cp, ee) * (sine(ee) * sine(ee) - 0.5) + randSize()
-        let yy = radius(cp, ee) * (cosine(ee) * sine(ee)) + randSize()
-        let zz = 1.5 * randSize();// + (cp) * 20.0
 
+        let ee = (eachLine / count - 0.5)
+        let cp = ((i / ctrlPts))
+        let xx = radius(cp) * (sine(ee) * sine(ee) - 0.5) + rVal()
+        let yy = radius(cp) * (cosine(ee) * sine(ee)) + rVal()
+        let zz = cp * 3.5 + ee * 20.0;// + (cp) * 20.0
         this[`controlPoint${i}`].push(xx, yy, zz)
+
       }
     }
 
@@ -192,7 +194,6 @@ export class Baller {
 
     let getCodeLooper = () => {
       return `
-      uniform float wiggle;
 
       float getLooper (float t) {
         float maxLife = 0.9;
@@ -458,7 +459,6 @@ export class Baller {
       return new THREE.RawShaderMaterial({
         uniforms: {
           baseColor: { value: new Color('#355829') },
-          wiggle: { value: 1.0 },
           time: { value: 0 },
           linearProgress: { value: 0 }
         },
@@ -522,7 +522,6 @@ export class Baller {
     lanBall.frustumCulled = false
     this.lanBall = lanBall
 
-
     let lanCurve = new THREE.Mesh(line, getLineMat(), count)
     this.lanCurve = lanCurve
     lanCurve.frustumCulled = false
@@ -583,7 +582,7 @@ export class Baller {
         loopComplete: () => {
           setTimeout(() => {
             animes['linear'].play()
-          }, 1000)
+          }, this.delayRestart * 1000)
         }
       })
     })
@@ -686,7 +685,7 @@ class LanLanGeoSpecial {
 
     // let ballBaseGeo = new THREE.SphereBufferGeometry(0.025, 32, 32)
     // ballBaseGeo = new THREE.BoxBufferGeometry(0.03, 0.03, 0.03, 1.0, 1.0, 1.0)
-    let ballBaseGeo = new THREE.IcosahedronBufferGeometry(0.05 / 2, 1)
+    let ballBaseGeo = new THREE.IcosahedronBufferGeometry(0.025, 1)
 
     let ballGeo = new THREE.InstancedBufferGeometry();
     ballGeo.instanceCount = count
