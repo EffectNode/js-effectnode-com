@@ -65,7 +65,6 @@ export class Swimmers {
     this.group = new THREE.Object3D()
 
     this.howMany = 500
-    // this.infoMap = new Map()
     this.meshMap = new Map()
 
     this.cylinderSides = 3
@@ -73,7 +72,7 @@ export class Swimmers {
     this.ctrlPts = 4
 
     this.restartDelay = 0
-    this.duration = Math.PI * 2.0 * 2.0 // seconds
+    this.duration = 4.125 * 3 // seconds
 
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
@@ -83,6 +82,7 @@ export class Swimmers {
     this.setupAnimation({ ctx })
     this.setupScene({ ctx })
   }
+
   prepAnimation ({ ctx }) {
     let count = this.howMany
     let numSides = this.cylinderSides

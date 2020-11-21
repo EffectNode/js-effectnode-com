@@ -1,6 +1,8 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 export class GLOrbit {
   constructor ({ ctx }) {
+    this.ctx = ctx
+
     let ctrls = new OrbitControls(ctx.camera, ctx.renderer.domElement)
     ctrls.enableDamping = true
     ctrls.dampingFactor = 0.06

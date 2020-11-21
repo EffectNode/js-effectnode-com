@@ -3,6 +3,8 @@ import { MeshStandardMaterial } from 'three';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 export class GLBloom {
   constructor ({ ctx }) {
+    this.ctx = ctx
+
     var params = {
       starBloomBase: 1.5,
 
@@ -24,10 +26,10 @@ export class GLBloom {
     let dpi = window.devicePixelRatio || 1.0
     // let rttA = new THREE.WebGLRenderTarget(rect.width, rect.height, { encoding: THREE.sRGBEncoding })
     let rttA = new THREE.WebGLRenderTarget(rect.width * dpi, rect.height * dpi)
-    let bloomPass = new UnrealBloomPass(new THREE.Vector2(rect.width * 0.75, rect.height * 0.75), 1.5, 0.4, 0.85 );
-    bloomPass.threshold = params.bloomThreshold;
-    bloomPass.strength = params.bloomStrength;
-    bloomPass.radius = params.bloomRadius;
+    let bloomPass = new UnrealBloomPass(new THREE.Vector2(rect.width * 0.75, rect.height * 0.75), 1.5, 0.4, 0.85 )
+    bloomPass.threshold = params.bloomThreshold
+    bloomPass.strength = params.bloomStrength
+    bloomPass.radius = params.bloomRadius
     bloomPass.renderToScreen = false
 
     ctx.onResize(() => {

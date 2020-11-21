@@ -99,15 +99,17 @@ class EffectNode {
     ]
     let vm = this
 
-    // this.services = new Proxy({}, {
-    //   get: (obj, key) => {
-    //     return this.getByName({ name: key })
-    //   },
-    //   set: () => {
-    //     console.warn('ref is for read only')
-    //     return true
-    //   }
-    // })
+    if (this.isRoot) {
+      this.services = new Proxy({}, {
+        get: (obj, key) => {
+          return this.getByName({ name: key })
+        },
+        set: () => {
+          console.warn('ref is for read only')
+          return true
+        }
+      })
+    }
 
     this.contextAPI = new Proxy(this, {
       get: (obj, key) => {
@@ -115,12 +117,15 @@ class EffectNode {
           return vm
         }
 
-        // if (key === 'services') {
-        //   return this.services
-        // }
-        // if (key === 'names') {
-        //   return this.services
-        // }
+        if (key === 'services') {
+          return this.root.services
+        }
+        if (key === 'names') {
+          return this.root.services
+        }
+        if (key === 'internal') {
+          return this.instances.map(e => e._)
+        }
 
         if (key === 'global') {
           return vm.root.contextAPI
@@ -160,7 +165,7 @@ class EffectNode {
           console.warn('protected read only properites', key)
           return false
         }
-        console.log('Setting', key, val)
+        console.log(`ctx.global.${key} = `, val)
         return Reflect.set(obj, key, val, receiver)
       }
     })
@@ -228,12 +233,13 @@ class EffectNode {
     }
     this.rAFID = requestAnimationFrame(rAF)
   }
+
   stopAll () {
     cancelAnimationFrame(this.rAFID)
   }
 
   processAllNodes () {
-    if (this.root.profile) {
+    if (this.root.debug) {
       let stats = {
         total: 0,
         nodes: 0,
@@ -246,7 +252,7 @@ class EffectNode {
       })
       stats.nodes = stats.profile.length
 
-      console.log(stats)
+      console.log(stats.profile.map(e => `${e.name}: ${Number(e.duration).toFixed(2)},`).join('  @'))
       this.events.emit('profile', stats)
     } else {
       this.root.instances.forEach(each => {
@@ -256,9 +262,9 @@ class EffectNode {
   }
 
   node (props) {
-    let ctx = new EffectNode({ ...props, isRoot: false, root: this.root, parent: this })
-    this.children.push(ctx)
-    return ctx
+    let newCtxNode = new EffectNode({ ...props, isRoot: false, root: this.root, parent: this })
+    this.children.push(newCtxNode)
+    return newCtxNode
   }
 }
 

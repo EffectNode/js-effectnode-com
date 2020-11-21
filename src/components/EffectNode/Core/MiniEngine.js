@@ -64,6 +64,7 @@ export class MiniEngine {
           duration: 0
         }
       }
+
       let start = window.performance.now()
       try {
         this.tasks.forEach(e => e())
