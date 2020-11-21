@@ -103,7 +103,7 @@ export class Baller {
         let cp = ((i / ctrlPts))
         let xx = radius(cp, ee) * (sine(ee) * sine(ee) - 0.5) + randSize()
         let yy = radius(cp, ee) * (cosine(ee) * sine(ee)) + randSize()
-        let zz = randSize();// + (cp) * 20.0
+        let zz = 1.5 * randSize();// + (cp) * 20.0
 
         this[`controlPoint${i}`].push(xx, yy, zz)
       }
@@ -468,9 +468,7 @@ export class Baller {
         fragmentShader: `
           precision highp float;
           varying float vT;
-
           uniform vec3 baseColor;
-
 
           void main (void) {
             gl_FragColor = vec4(baseColor, 0.5 * vT);
