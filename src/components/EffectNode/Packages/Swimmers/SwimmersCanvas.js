@@ -13,7 +13,7 @@ import { Swimmers } from "./Swimmers.js"
 export class SwimmersCanvas extends EffectNode {
   constructor ({ el }) {
     super()
-    this.debug = true
+    // this.logging = true
 
     // Application
     let ctx = this
@@ -37,5 +37,6 @@ export class SwimmersCanvas extends EffectNode {
     })
 
     console.log(this.internal)
+    console.log(this.names)
   }
 }

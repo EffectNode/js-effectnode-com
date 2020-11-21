@@ -239,7 +239,7 @@ class EffectNode {
   }
 
   processAllNodes () {
-    if (this.root.debug) {
+    if (this.root.logging) {
       let stats = {
         total: 0,
         nodes: 0,
