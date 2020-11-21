@@ -150,13 +150,7 @@ class EffectNode {
           return vm.events.emit
         }
         if (key === 'destroy') {
-          return () => {
-            if (vm.destroyed) {
-              return
-            }
-            vm.cleanUpWork()
-            vm.destroyed = true
-          }
+          return vm.destroy
         }
 
         return EN.traverseParent(obj, key)
@@ -178,6 +172,14 @@ class EffectNode {
     }
 
     return this.contextAPI
+  }
+
+  destroy () {
+    if (this.destroyed) {
+      return
+    }
+    this.cleanUpWork()
+    this.destroyed = true
   }
 
   link (object) {

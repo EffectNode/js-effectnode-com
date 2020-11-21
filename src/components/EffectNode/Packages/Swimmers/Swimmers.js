@@ -72,8 +72,8 @@ export class Swimmers {
     this.segments = 30
     this.ctrlPts = 4
 
-    this.delayRestart = 0
-    this.duration = 4.125
+    this.restartDelay = 0
+    this.duration = Math.PI * 2.0 * 2.0 // seconds
 
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
@@ -586,7 +586,7 @@ export class Swimmers {
         loopComplete: () => {
           setTimeout(() => {
             animes['linear'].play()
-          }, this.delayRestart * 1000)
+          }, this.restartDelay * 1000)
         }
       })
     })
