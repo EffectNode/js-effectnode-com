@@ -37,7 +37,6 @@ export class BallerCanvas {
 
     // console.log(ctx.services.CurveService)
 
-
     return ctx
   }
 }
