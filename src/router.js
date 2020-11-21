@@ -16,12 +16,12 @@ export default new Router({
       component: require('./components/EffectNode/AppVue/Curves.vue').default
     },
     {
-      path: '/baller',
-      component: require('./components/EffectNode/AppVue/Baller.vue').default
+      path: '/swimmers',
+      component: require('./components/EffectNode/AppVue/Swimmers.vue').default
     },
     {
       path: '/',
-      component: require('./components/EffectNode/AppVue/Baller.vue').default
+      component: require('./components/EffectNode/AppVue/Swimmers.vue').default
     },
     // {
     //   path: '/about',

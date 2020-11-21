@@ -11,10 +11,10 @@ export class GLRenderer {
 
     let el = ctx.el
     ctx.rect = el.getBoundingClientRect()
-    ctx.aspect = ctx.rect.width / ctx.rect.height
+    ctx.aspectRatio = ctx.rect.width / ctx.rect.height
     ctx.onResize(() => {
       ctx.rect = el.getBoundingClientRect()
-      ctx.aspect = ctx.rect.width / ctx.rect.height
+      ctx.aspectRatio = ctx.rect.width / ctx.rect.height
       renderer.setSize(ctx.rect.width, ctx.rect.height)
       let dpi = window.devicePixelRatio || 1.0
       renderer.setPixelRatio(dpi)

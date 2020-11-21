@@ -7,13 +7,13 @@ import { GLRenderer } from "../../WebGL/GLRenderer"
 import { PCamera } from "../../WebGL/PCamera"
 
 // Application Packages
-import { Baller } from "./Baller.js"
+import { Swimmers } from "./Swimmers.js"
 import { GLOrbit } from "../../WebGL/GLOribt"
 
-export class BallerCanvas {
+export class SwimmersCanvas {
   constructor ({ el }) {
     // Application Core
-    let ctx = new EffectNode({ name: 'BallerCanvasRenderRoot' })
+    let ctx = new EffectNode({ name: 'SwimmersCanvasRenderRoot' })
     ctx.el = el
 
     let renderer = new GLRenderer({ ctx })
@@ -21,7 +21,7 @@ export class BallerCanvas {
     camera.position.z = 20
 
     let scene = ctx.scene = new Scene()
-    scene.background = new Color('#8FB14E').offsetHSL(0, 0.2, 0.2)
+    scene.background = new Color('#8FB14E').offsetHSL(0, 0.3, 0.2)
 
     ctx.onLoop(() => {
       renderer.render(scene, camera)
@@ -30,7 +30,7 @@ export class BallerCanvas {
     new GLOrbit({ ctx: ctx.node({ name: 'GLOrbitService' }) })
 
     // Application Packages
-    new Baller({ ctx: ctx.node({ name: 'BallerService' }) })
+    new Swimmers({ ctx: ctx.node({ name: 'SwimmersService' }) })
     // setTimeout(() => {
     //   curves.destroy()
     // }, 1000)

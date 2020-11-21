@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import anime from 'animejs/lib/anime.es.js'
-import { Color } from 'three';
+import { Color } from 'three'
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-const dat = require('dat.gui');
+const dat = require('dat.gui')
 
 // THREE.GLTFLoader = GLTFLoader
 const TWEEN = require('@tweenjs/tween.js')
@@ -33,12 +33,10 @@ export class LanGUI {
     //   let end = kn.split('_')[1]
     //   folder.add({ get [kn] () { return mat.uniforms[start].value[end] }, set [kn] (v) { mat.uniforms[start].value[end] = v } }, kn, min, max)
     // }
-
     // let addNum = (mat, kn, min, max) => {
     //   let start = kn
     //   folder.add({ gets [kn] () { return mat.uniforms[start].value }, set [kn] (v) { mat.uniforms[start].value = v } }, kn, min, max)
     // }
-
     // let addColor = (mat, kn) => {
     //   folder.addColor({ get [kn] () { return '#' + mat.uniforms[kn].value.getHexString() }, set [kn] (v) { mat.uniforms[kn].value.setStyle(v) } }, kn)
     // }
@@ -55,25 +53,25 @@ export class LanGUI {
 
       folder.add({ get ['duration'] () { return ball.duration * 1000 }, set ['duration'] (v) { ball.duration = v / 1000 } }, 'duration', 0, 4.125 * 3 * 1000)
         .onChange(() => {
-          window.dispatchEvent(new Event('play-ball'))
+          window.dispatchEvent(new Event('start-tween'))
         })
     }
     setupHead()
   }
 }
 
-export class Baller {
+export class Swimmers {
   constructor ({ ctx }) {
     this.group = new THREE.Object3D()
     // ctx.scene.background = new THREE.Color('#000000')
 
-    this.howMany = 750
+    this.howMany = 500
     // this.infoMap = new Map()
     this.meshMap = new Map()
 
     this.cylinderSides = 3
     this.segments = 30
-    this.ctrlPts = 8
+    this.ctrlPts = 4
 
     this.delayRestart = 0
     this.duration = 4.125
@@ -93,21 +91,25 @@ export class Baller {
     let ctrlPts = this.ctrlPts
     let openEnded = true
 
-    let sine = each => Math.sin(each * Math.PI * 2.0)
-    let cosine = each => Math.cos(each * Math.PI * 2.0)
-    let rVal = () => 1.5 * (Math.random() - 0.5)
-    let radius = each => 7 + each * 25 + rVal() * sine(each) * cosine(each)
+    // let sine = val => Math.sin(val * Math.PI * 2.0)
+    // let cosine = val => Math.cos(val * Math.PI * 2.0)
+    // let rVal = () => 0.75 * (Math.random() - 0.5)
+    // let radius = val => val * 10 + 2
+
+    let tempVec3 = new THREE.Vector3(0, 0, 0)
 
     for (let eachLine = 0; eachLine < count; eachLine++) {
       for (let i = 0; i < ctrlPts; i++) {
-
-        let ee = (eachLine / count - 0.5)
+        let ee = (eachLine / count)
         let cp = ((i / ctrlPts))
-        let xx = radius(cp) * (sine(ee) * sine(ee) - 0.5) + rVal()
-        let yy = radius(cp) * (cosine(ee) * sine(ee)) + rVal()
-        let zz = cp * 3.5 + ee * 20.0;// + (cp) * 20.0
-        this[`controlPoint${i}`].push(xx, yy, zz)
 
+        // let xx = radius(cp) * (sine(ee) * sine(ee) - 0.5) + rVal()
+        // let yy = radius(cp) * (cosine(ee) * sine(ee)) + rVal()
+        // let zz = (cp - 0.5) * 10.;// + (cp) * 20.0
+
+        tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0, cp * Math.PI * 2.0)
+
+        this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }
 
@@ -288,7 +290,7 @@ export class Baller {
     let getRollGLSL = ({ name = 'CONTROL_POINTS' }) => {
       let ifthenelse = ``
 
-      // let intval = `${Number(pts.length).toFixed(0)}`
+      // let intval = `${Number(this.ctrlPts).toFixed(0)}`
       let floatval = `${Number(this.ctrlPts).toFixed(1)}`
 
       for (let idx = 0; idx < this.ctrlPts; idx++) {
@@ -299,7 +301,8 @@ export class Baller {
         `
       }
 
-      let attrs = ``
+      let attrs = `
+      `
       for (let idx = 0; idx < this.ctrlPts; idx++) {
         attrs += `
         attribute vec3 controlPoint${idx};
@@ -503,8 +506,6 @@ export class Baller {
       })
     }
 
-    console.log(ctx)
-
     let { line, ball } = new LanLanGeoSpecial({ parent: this, count, numSides, subdivisions, openEnded, ctx })
     ctx.onLoop(() => {
       let time = window.performance.now() * 0.001
@@ -525,6 +526,7 @@ export class Baller {
     let lanCurve = new THREE.Mesh(line, getLineMat(), count)
     this.lanCurve = lanCurve
     lanCurve.frustumCulled = false
+
     // lanCurve.scale.set(1.0, 1.0, 1.0);
     // lanCurve.layers.enable(3)
     // lanCurve.layers.enable(4)
@@ -641,16 +643,16 @@ class LanLanGeoSpecial {
 
     // unroll UVs
     for (let i = 0; i < posArray.length; i++) {
-      const [ u, v ] = uvs[i];
-      uvArray[i * 2 + 0] = u;
-      uvArray[i * 2 + 1] = v;
+      const [u, v] = uvs[i]
+      uvArray[i * 2 + 0] = u
+      uvArray[i * 2 + 1] = v
     }
 
-    const lineGeo = new THREE.InstancedBufferGeometry();
+    const lineGeo = new THREE.InstancedBufferGeometry()
     lineGeo.instanceCount = count
-    lineGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 1));
-    lineGeo.setAttribute('angle', new THREE.BufferAttribute(angleArray, 1));
-    lineGeo.setAttribute('uv', new THREE.BufferAttribute(uvArray, 2));
+    lineGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 1))
+    lineGeo.setAttribute('angle', new THREE.BufferAttribute(angleArray, 1))
+    lineGeo.setAttribute('uv', new THREE.BufferAttribute(uvArray, 2))
 
     let offsets = []
     let ddxyz = Math.ceil(Math.pow(count, 1 / 3))
@@ -692,6 +694,7 @@ class LanLanGeoSpecial {
     ballGeo.setAttribute('position', new THREE.BufferAttribute(ballBaseGeo.attributes.position.array, 3))
     ballGeo.setAttribute('uv', new THREE.BufferAttribute(ballBaseGeo.attributes.uv.array, 2))
     ballGeo.setAttribute('normal', new THREE.BufferAttribute(ballBaseGeo.attributes.normal.array, 3))
+
 
     for (let i = 0; i < this.parent.ctrlPts; i++) {
       ballGeo.setAttribute('controlPoint' + i, new THREE.InstancedBufferAttribute(new Float32Array(this.parent[`controlPoint${i}`]), 3));
