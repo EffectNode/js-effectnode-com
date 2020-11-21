@@ -9,26 +9,27 @@ import { GLCamera } from "../../WebGL/GLCamera"
 // Application Packages
 import { ClickerBalls } from "../ClickerBalls/ClickerBalls"
 
-export class KeyVisual {
+export class KeyVisual extends EffectNode {
   constructor ({ el }) {
+    super()
     // Application Core
-    let ctx = new EffectNode({ name: 'KeyVisualRenderRoot' })
-    ctx.el = el
+    let ctx = this
+    this.el = el
     this.ctx = ctx
 
-    let renderer = new GLRenderer({ ctx })
-    let camera = new GLCamera({ ctx })
-    camera.position.z = 10
+    this.renderer = new GLRenderer({ ctx })
+    this.camera = new GLCamera({ ctx })
+    this.camera.position.z = 10
 
-    let scene = ctx.scene = new Scene()
+    this.scene = new Scene()
 
     ctx.onLoop(() => {
-      renderer.render(scene, camera)
+      this.renderer.render(this.scene, this.camera)
     })
 
     // Application Packages
-    new ClickerBalls({ ctx: ctx.node({ name: 'BallService' }) })
+    new ClickerBalls({ ctx: ctx.node({ name: 'ClickerBalls' }) })
 
-    // console.log(ctx.services.BallService)
+    // console.log(ctx.services.ClickerBalls)
   }
 }

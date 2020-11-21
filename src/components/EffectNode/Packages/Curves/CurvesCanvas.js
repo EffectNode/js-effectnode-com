@@ -9,30 +9,24 @@ import { GLCamera } from "../../WebGL/GLCamera"
 // Application Packages
 import { Curves } from "../Curves/Curves"
 
-export class CurvesCanvas {
+export class CurvesCanvas extends EffectNode {
   constructor ({ el }) {
+    super()
+
     // Application Core
-    let ctx = new EffectNode({ name: 'CurvesCanvasRenderRoot' })
-    this.ctx = ctx
+    let ctx = this
+    this.el = el
 
-    ctx.el = el
+    this.renderer = new GLRenderer({ ctx })
+    this.camera = new GLCamera({ ctx })
+    this.camera.position.z = 10
 
-    let renderer = ctx.global.renderer = new GLRenderer({ ctx })
-    let camera = ctx.global.camera = new GLCamera({ ctx })
-    camera.position.z = 10
+    this.scene = new Scene()
 
-    let scene = ctx.scene = new Scene()
-
-    ctx.onLoop(() => {
-      renderer.render(scene, camera)
+    this.onLoop(() => {
+      this.renderer.render(this.scene, this.camera)
     })
 
-    // Application Packages
     new Curves({ ctx: ctx.node({ name: 'CurveService' }) })
-    // setTimeout(() => {
-    //   curves.destroy()
-    // }, 1000)
-
-    // console.log(ctx.services.CurveService)
   }
 }
