@@ -13,13 +13,12 @@ function animate(time) {
 }
 requestAnimationFrame(animate)
 
-export class LanGUI {
+export class EditGUI {
   constructor ({ parent, ctx }) {
-    let ball = parent
     this.parent = parent
     window.gui = window.gui || new dat.GUI()
     let gui = window.gui
-    let folder = gui.addFolder('Parmetric')
+    let folder = gui.addFolder('Swimmer')
     folder.open()
     if (window.innerWidth <= 560) {
       folder.close()
@@ -54,9 +53,21 @@ export class LanGUI {
       // addNum(ball.lanCurve.material, 'wiggle', -1, 1)
       // addColor('baseColor')
 
-      folder.add({ get ['duration'] () { return ball.duration * 1000 }, set ['duration'] (v) { ball.duration = v / 1000 } }, 'duration', 0, 4.125 * 3 * 1000)
+      folder.add({ get ['duration'] () { return parent.duration * 1000 }, set ['duration'] (v) { parent.duration = v / 1000 } }, 'duration', 0, 4.125 * 3 * 1000)
         .onChange(() => {
           window.dispatchEvent(new Event('start-tween'))
+        })
+
+      let tt = 0
+      folder.add({ get ['noiseLevel'] () { return parent.noiseLevel * 1 }, set ['noiseLevel'] (v) { parent.noiseLevel = v / 1 } }, 'noiseLevel', 0, 100)
+        .onChange(() => {
+          clearTimeout(tt)
+          tt = setTimeout(() => {
+            parent.cleanUpScene()
+            parent.prepAnimation({ ctx })
+            parent.setupScene({ ctx })
+            window.dispatchEvent(new Event('start-tween'))
+          }, 250)
         })
     }
     setupHead()
@@ -68,12 +79,16 @@ export class Swimmers {
     this.ctx = ctx
     this.group = new THREE.Object3D()
 
-    this.howMany = 250
-    this.meshMap = new Map()
+    this.qualityFactor = 1.5
+    this.scaleFactor = 5
+    this.amountFactor = 250
 
-    this.cylinderSides = 3
-    this.segments = 12
-    this.ctrlPts = 8
+    this.group.scale.set(this.scaleFactor, this.scaleFactor, this.scaleFactor)
+
+    this.noiseLevel = 0.5
+    this.cylinderSides = 3 * this.qualityFactor
+    this.segments = 12 * this.qualityFactor
+    this.ctrlPts = 10
 
     this.restartDelay = 0
     this.duration = 4.125 * 3 // seconds
@@ -81,41 +96,71 @@ export class Swimmers {
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
     }
-    this.prepAnimation({ ctx })
-    this.setupAnimation({ ctx })
-    this.setupScene({ ctx })
 
-    // new LanGUI({ parent: this, ctx })
+    this.prepAnimation({ ctx })
+    this.setupScene({ ctx })
+    this.setupProgressValue({ ctx })
+
+    new EditGUI({ parent: this, ctx })
+  }
+
+  setupScene ({ ctx }) {
+    ctx.scene.add(this.group)
+    ctx.onClean(() => {
+      ctx.scene.remove(this.group)
+    })
+  }
+
+  // { ctx }
+  cleanUpScene () {
+    this.group.remove(this.lanCurve)
+    this.group.remove(this.lanBall)
   }
 
   prepAnimation ({ ctx }) {
-    let count = this.howMany
+    let count = this.amountFactor
     let numSides = this.cylinderSides
     let subdivisions = this.segments
     let ctrlPts = this.ctrlPts
-    let openEnded = true
+    let openEnded = false
 
     // let sine = val => Math.sin(val * Math.PI * 2.0)
     // let cosine = val => Math.cos(val * Math.PI * 2.0)
     // let rVal = () => 0.75 * (Math.random() - 0.5)
     // let radius = val => val * 10 + 2
 
-    let tempVec3 = new THREE.Vector3(0, 0, 0)
-    for (let eachLine = 0; eachLine < count; eachLine++) {
-      for (let i = 0; i < ctrlPts; i++) {
-        let ee = (eachLine / count)
-        let cp = ((i / ctrlPts))
+    // let sphereV3 = new THREE.Vector3(0, 0, 0)
+    let cylinder = new THREE.Vector3(0, 0, 0)
 
-        // let xx = radius(cp) * (sine(ee) * sine(ee) - 0.5) + rVal()
-        // let yy = radius(cp) * (cosine(ee) * sine(ee)) + rVal()
-        // let zz = (cp - 0.5) * 10.;// + (cp) * 20.0
-        // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
+    let updateCtrlPts = () => {
+      for (let eachLine = 0; eachLine < count; eachLine++) {
+        for (let i = 0; i < ctrlPts; i++) {
+          let ee = (eachLine / count)
+          let cp = ((i / ctrlPts))
 
-        tempVec3.setFromCylindricalCoords(5.0 + 2.0 * Math.random(ee * Math.PI), (ee * Math.PI * 2.0 + cp * Math.PI * 2.0) * 2.0, Math.random() * 2.3)
-        tempVec3.multiplyScalar(3.0)
-        this[`controlPoint${i}`].push(...tempVec3.toArray())
+          // let xx = radius(cp) * (sine(ee) * sine(ee) - 0.5) + rVal()
+          // let yy = radius(cp) * (cosine(ee) * sine(ee)) + rVal()
+          // let zz = (cp - 0.5) * 10.;// + (cp) * 20.0
+          let rr = 6.5 + 1.5 * Math.random()
+          let angle = (ee * Math.PI * 2.0 + (cp) * Math.PI * 2.0 + (1.0 - cp) * 1.4 * Math.PI * 2.0) * 2.0 + 0.5 * Math.random() * this.noiseLevel
+          let hh = Math.random() * 2.3 * this.noiseLevel
+          cylinder.setFromCylindricalCoords(
+            rr,
+            angle,
+            hh
+          )
+          cylinder.multiplyScalar(this.scaleFactor)
+
+          this[`controlPoint${i}`].push(
+            cylinder.x,
+            cylinder.y,
+            cylinder.z
+          )
+        }
       }
     }
+
+    updateCtrlPts()
 
     let makeLib = () => {
       return `
@@ -273,7 +318,7 @@ export class Swimmers {
       }
 
       vec3 makeGeo () {
-        float thickness = 0.02;
+        float thickness = 0.02 * 1.5 * ${(this.scaleFactor / 5.0).toFixed(3.0)};
         float t = (position * 2.0) * 0.5 + 0.5;
 
         vec2 volume = vec2(thickness);
@@ -545,20 +590,10 @@ export class Swimmers {
     this.group.add(this.lanCurve)
     this.group.add(this.lanBall)
   }
-  setupScene ({ ctx }) {
-    // gltf.scene.position.z = 0
-    // gltf.scene.position.y = 0
-    // gltf.scene.scale.set(1, 1, 1)
-    // ctx.scene.add(gltf.scene)
 
-    this.group.scale.set(10.0, 10.0, 10.0)
-    ctx.scene.add(this.group)
-    // ctx.scene.add(this.lanBall)
-    // ctx.scene.add(this.lanCurve)
-    // ctx.camera.position.set(0, 20, -10)
-  }
 
-  setupAnimation () {
+
+  setupProgressValue () {
     // animation stuff
     // var mixer = new THREE.AnimationMixer(gltf.scene)
     // var clock = new THREE.Clock()
@@ -682,8 +717,9 @@ class LanLanGeoSpecial {
     lineGeo.setAttribute('offset', new THREE.InstancedBufferAttribute(new Float32Array( offsets ), 3));
 
     // let ballBaseGeo = new THREE.SphereBufferGeometry(0.025, 32, 32)
-    // ballBaseGeo = new THREE.BoxBufferGeometry(0.03, 0.03, 0.03, 1.0, 1.0, 1.0)
-    let ballBaseGeo = new THREE.IcosahedronBufferGeometry(0.025 * 2, 1)
+    let bRadius = 0.025 * 2.5 * 1.5 * (this.parent.scaleFactor / 5.0)
+    // let ballBaseGeo = new THREE.BoxBufferGeometry(bRadius, bRadius, bRadius, 1.0, 1.0, 1.0)
+    let ballBaseGeo = new THREE.IcosahedronBufferGeometry(bRadius, 1)
 
     let ballGeo = new THREE.InstancedBufferGeometry()
     ballGeo.instanceCount = count
@@ -694,7 +730,7 @@ class LanLanGeoSpecial {
     for (let i = 0; i < this.parent.ctrlPts; i++) {
       ballGeo.setAttribute('controlPoint' + i, new THREE.InstancedBufferAttribute(new Float32Array(this.parent[`controlPoint${i}`]), 3));
     }
-    ballGeo.setAttribute('offset', new THREE.InstancedBufferAttribute(new Float32Array( offsets ), 3));
+    ballGeo.setAttribute('offset', new THREE.InstancedBufferAttribute(new Float32Array(offsets), 3));
 
     ctx.onClean(() => {
       lineGeo.dispose()

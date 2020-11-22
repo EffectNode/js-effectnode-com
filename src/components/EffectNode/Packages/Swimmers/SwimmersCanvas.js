@@ -22,7 +22,8 @@ export class SwimmersCanvas extends EffectNode {
     this.el = el
     this.renderer = new GLRenderer({ ctx })
     this.camera = new GLCamera({ ctx })
-    this.camera.position.z = 30
+    this.camera.position.y = 175
+    this.camera.position.z = 200
 
     this.scene = new Scene()
     this.scene.background = new Color('#121212')
@@ -49,3 +50,8 @@ export class SwimmersCanvas extends EffectNode {
 
 // context
 // instnace managment (like vuejs and reactjs but in vanilla & clean code)
+
+// Credits
+// All Innovative inspirations from EffectNode are gifted from our Lord, heavenly father, Dear Jesus.
+
+// .

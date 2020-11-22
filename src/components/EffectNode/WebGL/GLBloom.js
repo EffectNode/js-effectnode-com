@@ -7,18 +7,18 @@ export class GLBloom extends EffectNode {
     super({ ctx })
 
     var params = {
-      starBloomBase: 1.5,
+      starBloomBase: 1.0,
 
       bloomThreshold: 0.5,
       bloomStrength: 1.2,
-      bloomRadius: 0.5
+      bloomRadius: 1.0
     };
 
     ctx.onLoop(() => {
       let time = window.performance.now() * 0.009
       // params.bloomThreshold = 0.5 + Math.sin(time) * -0.5
       params.bloomStrength = params.starBloomBase + Math.sin(time) * 0.5
-      params.bloomStrength *= 0.7
+      params.bloomStrength *= 1.0
     })
 
     let { renderer, camera, scene } = ctx
@@ -131,12 +131,12 @@ export class GLBloom extends EffectNode {
       // animation code (make the model move)
       renderer.clearDepth()
 
-      // ------
+      // ------ Prepare Darkness Scene with Glowing Obj -----
       bloomLayerMesh.visible = false
       ctx.scene.environment = null
       ctx.scene.traverse(darkenNonBloomed)
 
-      ///
+      /// Make RTT Texture
       renderer.setRenderTarget(rttA)
       renderer.clear(true, true, true)
       renderer.render(scene, camera)
@@ -148,13 +148,14 @@ export class GLBloom extends EffectNode {
       bloomPass.render(renderer, writeBuffer, readBuffer, deltaTime, maskActive)
       ///
 
+      // ------ Restore Original Scene -----
       ctx.scene.traverse(restoreMaterial)
       ctx.scene.environment = window.origEnvMap
-
       renderer.setRenderTarget(null)
       bloomLayerMesh.visible = true
 
       // -------
+      // Render to Screen
       renderer.render(scene, camera)
     }
   }
