@@ -96,7 +96,7 @@ export class Swimmers {
     // let radius = val => val * 10 + 2
 
     let tempVec3 = new THREE.Vector3(0, 0, 0)
-
+    let mod = a => a % Math.PI * 2.0
     for (let eachLine = 0; eachLine < count; eachLine++) {
       for (let i = 0; i < ctrlPts; i++) {
         let ee = (eachLine / count)
@@ -108,7 +108,7 @@ export class Swimmers {
 
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
-        tempVec3.setFromCylindricalCoords(5.0, ee * Math.PI * 2.0 + cp * 3.1415 * 2.0, cp * 5.0 + Math.random() * 2)
+        tempVec3.setFromCylindricalCoords(5.0 + Math.random(), mod((ee - 0.5) * 3.0 * Math.PI * 2.0) + cp * Math.PI * 2.0, (cp - 0.5) * 7.0 + Math.random())
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }

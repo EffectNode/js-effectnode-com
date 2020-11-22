@@ -31,6 +31,7 @@ export class SwimmersCanvas extends EffectNode {
 
     new Swimmers({ ctx: ctx.node({ name: 'Swimmers' }) })
 
+
     // custom render
     ctx.services.bloomer.onLoop(() => {
       this.bloom.renderSelectiveBloom()
