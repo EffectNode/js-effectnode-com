@@ -22,7 +22,7 @@ export class SwimmersCanvas extends EffectNode {
     this.el = el
     this.renderer = new GLRenderer({ ctx })
     this.camera = new GLCamera({ ctx })
-    this.camera.position.z = 20
+    this.camera.position.z = 30
 
     this.scene = new Scene()
     this.scene.background = new Color('#121212')

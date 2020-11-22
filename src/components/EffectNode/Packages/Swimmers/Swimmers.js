@@ -112,6 +112,7 @@ export class Swimmers {
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
         tempVec3.setFromCylindricalCoords(5.0 + 2.0 * Math.random(ee * Math.PI), (ee * Math.PI * 2.0 + cp * Math.PI * 2.0) * 2.0, (cp - 0.5) * 7.0 + Math.random(cp * Math.PI) * 2.3)
+        tempVec3.multiplyScalar(3.0)
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }
@@ -273,7 +274,7 @@ export class Swimmers {
       }
 
       vec3 makeGeo () {
-        float thickness = 0.01;
+        float thickness = 0.02;
         float t = (position * 2.0) * 0.5 + 0.5;
 
         vec2 volume = vec2(thickness);
@@ -680,17 +681,15 @@ class LanLanGeoSpecial {
     }
     lineGeo.setAttribute('offset', new THREE.InstancedBufferAttribute(new Float32Array( offsets ), 3));
 
-
     // let ballBaseGeo = new THREE.SphereBufferGeometry(0.025, 32, 32)
     // ballBaseGeo = new THREE.BoxBufferGeometry(0.03, 0.03, 0.03, 1.0, 1.0, 1.0)
-    let ballBaseGeo = new THREE.IcosahedronBufferGeometry(0.025, 1)
+    let ballBaseGeo = new THREE.IcosahedronBufferGeometry(0.025 * 2, 1)
 
-    let ballGeo = new THREE.InstancedBufferGeometry();
+    let ballGeo = new THREE.InstancedBufferGeometry()
     ballGeo.instanceCount = count
     ballGeo.setAttribute('position', new THREE.BufferAttribute(ballBaseGeo.attributes.position.array, 3))
     ballGeo.setAttribute('uv', new THREE.BufferAttribute(ballBaseGeo.attributes.uv.array, 2))
     ballGeo.setAttribute('normal', new THREE.BufferAttribute(ballBaseGeo.attributes.normal.array, 3))
-
 
     for (let i = 0; i < this.parent.ctrlPts; i++) {
       ballGeo.setAttribute('controlPoint' + i, new THREE.InstancedBufferAttribute(new Float32Array(this.parent[`controlPoint${i}`]), 3));
