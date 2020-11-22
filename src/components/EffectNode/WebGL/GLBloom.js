@@ -1,9 +1,10 @@
 import * as THREE from 'three'
 import { MeshStandardMaterial } from 'three';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-export class GLBloom {
+import { EffectNode } from '../Core/EffectNode';
+export class GLBloom extends EffectNode {
   constructor ({ ctx }) {
-    this.ctx = ctx
+    super({ ctx })
 
     var params = {
       starBloomBase: 1.5,

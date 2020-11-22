@@ -5,6 +5,7 @@ import { Bally } from "./Bally"
 
 export class ClickerBalls {
   constructor ({ ctx }) {
+    this.ctx = ctx
     this.bucket = new ActionCollection({
       array: [],
       onMake: (value) => {

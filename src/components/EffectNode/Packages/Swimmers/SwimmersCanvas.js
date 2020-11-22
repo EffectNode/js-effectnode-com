@@ -14,10 +14,10 @@ export class SwimmersCanvas extends EffectNode {
   constructor ({ el }) {
     super()
 
-    // Application
+    // App Application
     let ctx = this
 
-    // App Global Resources
+    // App Resources
     this.el = el
     this.renderer = new GLRenderer({ ctx })
     this.camera = new GLCamera({ ctx })
@@ -26,15 +26,13 @@ export class SwimmersCanvas extends EffectNode {
     this.scene = new Scene()
     this.scene.background = new Color('#121212')
 
-    this.bloom = new GLBloom({ ctx: ctx.node({ name: 'bloomer' }) })
-    this.orbit = new GLOrbit({ ctx })
-
+    new GLOrbit({ ctx })
+    new GLBloom({ ctx: ctx.node({ name: 'BloomerRenderer' }) })
     new Swimmers({ ctx: ctx.node({ name: 'Swimmers' }) })
 
-
-    // custom render
-    ctx.services.bloomer.onLoop(() => {
-      this.bloom.renderSelectiveBloom()
+    let bloom = ctx.services.BloomerRenderer
+    bloom.onLoop(() => {
+      bloom.renderSelectiveBloom()
     })
 
     // Optimizer

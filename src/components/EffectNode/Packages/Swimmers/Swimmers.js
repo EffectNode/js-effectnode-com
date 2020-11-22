@@ -62,6 +62,7 @@ export class LanGUI {
 
 export class Swimmers {
   constructor ({ ctx }) {
+    this.ctx = ctx
     this.group = new THREE.Object3D()
 
     this.howMany = 500
@@ -77,7 +78,6 @@ export class Swimmers {
     for (let i = 0; i < this.ctrlPts; i++) {
       this[`controlPoint${i}`] = []
     }
-
     this.prepAnimation({ ctx })
     this.setupAnimation({ ctx })
     this.setupScene({ ctx })
@@ -106,7 +106,7 @@ export class Swimmers {
         // let zz = (cp - 0.5) * 10.;// + (cp) * 20.0
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
-        tempVec3.setFromCylindricalCoords(5.0 + Math.random(ee * Math.PI), (ee * Math.PI * 2.0 + cp * Math.PI * 2.0) * 2.0, (cp - 0.5) * 7.0 + Math.random(cp * Math.PI) * 2.3)
+        tempVec3.setFromCylindricalCoords(5.0 + 2.0 * Math.random(ee * Math.PI), (ee * Math.PI * 2.0 + cp * Math.PI * 2.0) * 2.0, (cp - 0.5) * 7.0 + Math.random(cp * Math.PI) * 2.3)
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }

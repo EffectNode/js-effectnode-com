@@ -71,9 +71,13 @@ export const genID = EN.genID
 export const getID = EN.genID
 
 class EffectNode {
-  constructor ({ _id, name, root = false, type, isRoot = true, parent = false, ownLoop = false } = {}) {
+  constructor ({ ctx, _id, name, root = false, type, isRoot = true, parent = false, ownLoop = false } = {}) {
+    if (ctx) {
+      return ctx
+    }
+
     this._id = _id || EN.genID()
-    this.type = type || isRoot ? 'RootNode' : 'Node'
+    this.type = type || isRoot ? 'Root' : 'Node'
     this.name = name || this.type + this._id
     this.isRoot = isRoot
     this.root = root || this

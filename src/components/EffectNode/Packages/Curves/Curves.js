@@ -16,7 +16,7 @@ export class Curves {
     // ctx.item
 
     let dimension = 3
-    let size = 15
+    let size = 10
     let count = Math.pow(size, dimension)
     // let sizeX = size
     // let sizeY = size
