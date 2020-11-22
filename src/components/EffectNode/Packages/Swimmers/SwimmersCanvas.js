@@ -37,7 +37,7 @@ export class SwimmersCanvas extends EffectNode {
 
     // Optimizer
     // this.logging = true
-    // console.log(this.internals)
+    console.log(this.internals)
 
     // Advanced
     console.log(this.names)
