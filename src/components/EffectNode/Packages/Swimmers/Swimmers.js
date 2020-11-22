@@ -69,7 +69,7 @@ export class Swimmers {
 
     this.cylinderSides = 3
     this.segments = 18
-    this.ctrlPts = 4
+    this.ctrlPts = 8
 
     this.restartDelay = 0
     this.duration = 4.125 * 3 // seconds
@@ -106,7 +106,7 @@ export class Swimmers {
         // let zz = (cp - 0.5) * 10.;// + (cp) * 20.0
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
-        tempVec3.setFromCylindricalCoords(5.0, ee * Math.PI * 2.0 + cp * Math.PI * 2.0, (cp - 0.5) * 7.0 + Math.random() * 2.3)
+        tempVec3.setFromCylindricalCoords(5.0 + Math.random() * 1.0, ee * Math.PI * 2.0 + cp * Math.PI * 2.0, (cp - 0.5) * 7.0 + Math.random() * 2.3)
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }
