@@ -108,7 +108,7 @@ export class Swimmers {
 
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
-        tempVec3.setFromCylindricalCoords(5.0 + Math.random(), mod((ee - 0.5) * 3.0 * Math.PI * 2.0) + cp * Math.PI * 2.0, (cp - 0.5) * 7.0 + Math.random())
+        tempVec3.setFromCylindricalCoords(5.0, mod(ee * Math.PI * 2.0) + cp * Math.PI * 2.0, (cp - 0.5) * 7.0 + Math.random() * 2.3)
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }
