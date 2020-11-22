@@ -65,11 +65,11 @@ export class Swimmers {
     this.ctx = ctx
     this.group = new THREE.Object3D()
 
-    this.howMany = 500
+    this.howMany = 250
     this.meshMap = new Map()
 
     this.cylinderSides = 3
-    this.segments = 18
+    this.segments = 12
     this.ctrlPts = 8
 
     this.restartDelay = 0
@@ -81,6 +81,8 @@ export class Swimmers {
     this.prepAnimation({ ctx })
     this.setupAnimation({ ctx })
     this.setupScene({ ctx })
+
+    new LanGUI({ parent: this, ctx })
   }
 
   prepAnimation ({ ctx }) {

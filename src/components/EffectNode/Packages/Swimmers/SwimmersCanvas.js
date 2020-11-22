@@ -3,7 +3,7 @@ import { Color, Scene } from "three"
 // Stack
 import { EffectNode } from "../../Core/EffectNode"
 import { GLCamera } from "../../WebGL/GLCamera"
-import { GLOrbit } from "../../WebGL/GLOribt"
+import { GLOrbit } from "../../WebGL/GLOrbit"
 import { GLBloom } from "../../WebGL/GLBloom"
 import { GLRenderer } from "../../WebGL/GLRenderer"
 
@@ -40,7 +40,7 @@ export class SwimmersCanvas extends EffectNode {
     // console.log(this.internals)
 
     // Advanced
-    // console.log(this.names.Swimmers)
+    console.log(this.names)
   }
 }
 

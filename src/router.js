@@ -9,19 +9,19 @@ export default new Router({
   routes: [
     {
       path: '/balls',
-      component: require('./components/EffectNode/AppVue/Home.vue').default
+      component: () => import('./components/EffectNode/AppVue/Home.vue')
     },
     {
       path: '/curves',
-      component: require('./components/EffectNode/AppVue/Curves.vue').default
+      component: () => import('./components/EffectNode/AppVue/Curves.vue')
     },
     {
       path: '/swimmers',
-      component: require('./components/EffectNode/AppVue/Swimmers.vue').default
+      component: () => import('./components/EffectNode/AppVue/Swimmers.vue')
     },
     {
       path: '/',
-      component: require('./components/EffectNode/AppVue/Swimmers.vue').default
+      component: () => import('./components/EffectNode/AppVue/Swimmers.vue')
     },
     // {
     //   path: '/about',

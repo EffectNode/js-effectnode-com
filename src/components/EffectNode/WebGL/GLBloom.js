@@ -24,10 +24,11 @@ export class GLBloom extends EffectNode {
     let { renderer, camera, scene } = ctx
     let rect = renderer.domElement.getBoundingClientRect()
 
+    let resolutionScale = 0.5
     let dpi = window.devicePixelRatio || 1.0
     // let rttA = new THREE.WebGLRenderTarget(rect.width, rect.height, { encoding: THREE.sRGBEncoding })
     let rttA = new THREE.WebGLRenderTarget(rect.width * dpi, rect.height * dpi)
-    let bloomPass = new UnrealBloomPass(new THREE.Vector2(rect.width * 0.75, rect.height * 0.75), 1.5, 0.4, 0.85 )
+    let bloomPass = new UnrealBloomPass(new THREE.Vector2(rect.width * resolutionScale, rect.height * resolutionScale), 1.5, 0.4, 0.85 )
     bloomPass.threshold = params.bloomThreshold
     bloomPass.strength = params.bloomStrength
     bloomPass.radius = params.bloomRadius
@@ -36,7 +37,7 @@ export class GLBloom extends EffectNode {
     ctx.onResize(() => {
       rect = renderer.domElement.getBoundingClientRect()
       rttA.setSize(rect.width * dpi, rect.height * dpi)
-      bloomPass.setSize(rect.width * 0.75, rect.height * 0.75)
+      bloomPass.setSize(rect.width * resolutionScale, rect.height * resolutionScale)
     })
 
     ctx.onLoop(() => {
@@ -54,6 +55,7 @@ export class GLBloom extends EffectNode {
     }
 
     let planeGeo = new THREE.PlaneBufferGeometry(2, 2, 2, 2)
+    // QUAD Shader
     let planeMaterial = new THREE.ShaderMaterial({
       uniforms: {
         rtt: { value: rttA.texture }
