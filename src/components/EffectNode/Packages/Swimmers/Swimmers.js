@@ -111,7 +111,7 @@ export class Swimmers {
         // let zz = (cp - 0.5) * 10.;// + (cp) * 20.0
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
-        tempVec3.setFromCylindricalCoords(5.0 + 2.0 * Math.random(ee * Math.PI), (ee * Math.PI * 2.0 + cp * Math.PI * 2.0) * 2.0, (cp - 0.5) * 7.0 + Math.random(cp * Math.PI) * 2.3)
+        tempVec3.setFromCylindricalCoords(5.0 + 2.0 * Math.random(ee * Math.PI), (ee * Math.PI * 2.0 + cp * Math.PI * 2.0) * 2.0, Math.random() * 2.3)
         tempVec3.multiplyScalar(3.0)
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
@@ -169,12 +169,12 @@ export class Swimmers {
 
       float fbm6( vec2 p ) {
           float f = 0.0;
-          f += 0.500000*(0.5+0.5*noise( p )); p = m*p*2.02;
-          f += 0.250000*(0.5+0.5*noise( p )); p = m*p*2.03;
-          f += 0.125000*(0.5+0.5*noise( p )); p = m*p*2.01;
-          f += 0.062500*(0.5+0.5*noise( p )); p = m*p*2.04;
-          f += 0.031250*(0.5+0.5*noise( p )); p = m*p*2.01;
-          f += 0.015625*(0.5+0.5*noise( p ));
+          f += 0.500000*(0.5+0.5 * noise( p )); p = m*p*2.02;
+          f += 0.250000*(0.5+0.5 * noise( p )); p = m*p*2.03;
+          f += 0.125000*(0.5+0.5 * noise( p )); p = m*p*2.01;
+          f += 0.062500*(0.5+0.5 * noise( p )); p = m*p*2.04;
+          f += 0.031250*(0.5+0.5 * noise( p )); p = m*p*2.01;
+          f += 0.015625*(0.5+0.5 * noise( p ));
           return f/0.96875;
       }
 
@@ -226,7 +226,6 @@ export class Swimmers {
 
     let makeTubeGLSL = () => {
       let item = `
-
       // dough nut
       // vec3 doughNut (float t) {
       //   float angle = t * 2.0 * PI;
@@ -552,6 +551,7 @@ export class Swimmers {
     // gltf.scene.scale.set(1, 1, 1)
     // ctx.scene.add(gltf.scene)
 
+    this.group.scale.set(10.0, 10.0, 10.0)
     ctx.scene.add(this.group)
     // ctx.scene.add(this.lanBall)
     // ctx.scene.add(this.lanCurve)
