@@ -14,8 +14,9 @@ export class KeyVisual extends EffectNode {
     super()
     // Application Core
     let ctx = this
-    this.el = el
     this.ctx = ctx
+
+    this.el = el
 
     this.renderer = new GLRenderer({ ctx })
     this.camera = new GLCamera({ ctx })
