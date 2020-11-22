@@ -24,7 +24,7 @@ export class SwimmersCanvas extends EffectNode {
     this.camera.position.z = 20
 
     this.scene = new Scene()
-    this.scene.background = new Color('#232323')
+    this.scene.background = new Color('#121212')
 
     this.bloom = new GLBloom({ ctx: ctx.node({ name: 'bloomer' }) })
     this.orbit = new GLOrbit({ ctx })

@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import anime from 'animejs/lib/anime.es.js'
 import { Color } from 'three'
-import { random } from 'core-js/fn/number'
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 const dat = require('dat.gui')
 
@@ -69,7 +68,7 @@ export class Swimmers {
     this.meshMap = new Map()
 
     this.cylinderSides = 3
-    this.segments = 8
+    this.segments = 18
     this.ctrlPts = 4
 
     this.restartDelay = 0
@@ -109,7 +108,7 @@ export class Swimmers {
 
         // tempVec3.setFromSphericalCoords(5, ee * Math.PI * 2.0 + cp * 30.0 + Math.random() * 1.0, cp * Math.PI * 2.0)
 
-        tempVec3.setFromCylindricalCoords(5.0, ee * Math.PI * 2.0 + cp * 3.1415 * 2.0, cp * 10.0 + Math.random() * 2)
+        tempVec3.setFromCylindricalCoords(5.0, ee * Math.PI * 2.0 + cp * 3.1415 * 2.0, cp * 5.0 + Math.random() * 2)
         this[`controlPoint${i}`].push(...tempVec3.toArray())
       }
     }
