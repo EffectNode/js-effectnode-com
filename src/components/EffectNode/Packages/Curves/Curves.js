@@ -33,14 +33,14 @@ export class Curves {
 
     // let geo = new BoxBufferGeometry(0.9, 2, 2, 500, 1, 1)//;
 
-    let controlPoints = [new THREE.Vector3(-153.4197541332805, 148.40563818999576, 908.5037477960573),
-      new THREE.Vector3(-594.1148147458699, 148.40563818999576, -78.38310037279336),
-      new THREE.Vector3(186.94941449888915, 138.59061351673523, -438.399174466708),
-      new THREE.Vector3(629.2880043203172, 102.66487050746449, 101.57171288589444),
-      new THREE.Vector3(-137.6973516684562, 503.80467707472917, 201.62280551363258),
-      new THREE.Vector3(-340.57823580136943, -1.4501254737023075, 97.04560971249764),
-      new THREE.Vector3(209.90438242430827, -120.16801322370745, 508.71789184058963),
-      new THREE.Vector3(447.22473890918684, -118.98657965633289, -499.03450232803004)]
+    let controlPoints = [new THREE.Vector3(-153.4197541332805, 602.2842649103882, 359.418400289163),
+      new THREE.Vector3(-392.0363395266815, 570.4566516367261, -73.45548420131888),
+      new THREE.Vector3(186.94941449888915, 560.3151130695674, -437.2747381058281),
+      new THREE.Vector3(681.5478987247174, 102.66487050746449, -549.0420662782607),
+      new THREE.Vector3(679.1265410036509, 317.9163259626413, 125.20635116261195),
+      new THREE.Vector3(320.42945622005925, -1.4501254737023075, 715.1495822876569),
+      new THREE.Vector3(-408.91078659800064, 221.57512686921615, 585.4569096178118),
+      new THREE.Vector3(-592.084540628733, 124.02196204099367, -143.6297593666219)]
 
     // controlPoints.forEach(e => {
     //   e.multiplyScalar(100.0)
@@ -285,6 +285,7 @@ export class Curves {
 
     let lanCurve = new THREE.Mesh(geo, getMat(), count)
     lanCurve.frustumCulled = false
+    lanCurve.userData.bloom = true
     // lanCurve.scale.set(1.0, 1.0, 1.0);
     ctx.scene.add(lanCurve)
 
@@ -341,7 +342,7 @@ class Editor {
       let scene, camera, renderer
 			function init() {
 				scene = ctx.scene;
-				scene.background = new THREE.Color( 0xf0f0f0 );
+				// scene.background = new THREE.Color( 0xf0f0f0 );
 
 				camera = ctx.camera;
 				camera.position.set( 0, 250, 1000 );

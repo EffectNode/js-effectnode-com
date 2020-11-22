@@ -7,8 +7,9 @@ import { GLOrbit } from "../../WebGL/GLOrbit"
 import { GLBloom } from "../../WebGL/GLBloom"
 import { GLRenderer } from "../../WebGL/GLRenderer"
 
-// Application
+// Application Content
 import { Swimmers } from "./Swimmers.js"
+// import { Curves } from "../Curves/Curves.js"
 
 export class SwimmersCanvas extends EffectNode {
   constructor ({ el }) {
@@ -26,24 +27,25 @@ export class SwimmersCanvas extends EffectNode {
     this.scene = new Scene()
     this.scene.background = new Color('#121212')
 
-    new GLOrbit({ ctx })
-    new GLBloom({ ctx: ctx.node({ name: 'BloomerRenderer' }) })
-    new Swimmers({ ctx: ctx.node({ name: 'Swimmers' }) })
-
-    let bloom = ctx.services.BloomerRenderer
+    new GLBloom({ ctx: ctx.node({ name: 'Bloomer' }) })
+    let bloom = ctx.services.Bloomer
     bloom.onLoop(() => {
       bloom.renderSelectiveBloom()
     })
+
+    new GLOrbit({ ctx })
+    new Swimmers({ ctx: ctx.node({ name: 'Swimmers' }) })
+
+    // new Curves({ ctx: ctx.node({ name: 'Curves' }) })
 
     // Optimizer
     // this.logging = true
     console.log(this.internals)
 
     // Advanced
-    console.log(this.names)
+    // console.log(this.names)
   }
 }
 
 // context
 // instnace managment (like vuejs and reactjs but in vanilla & clean code)
-//

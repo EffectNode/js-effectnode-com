@@ -2,7 +2,7 @@
 import { EffectNode } from "../../Core/EffectNode"
 
 // Stack
-import { Scene } from "three"
+import { Color, Scene } from "three"
 import { GLRenderer } from "../../WebGL/GLRenderer"
 import { GLCamera } from "../../WebGL/GLCamera"
 
@@ -22,6 +22,7 @@ export class CurvesCanvas extends EffectNode {
     this.camera.position.z = 10
 
     this.scene = new Scene()
+    this.scene.background = new Color('#121212')
 
     this.onLoop(() => {
       this.renderer.render(this.scene, this.camera)

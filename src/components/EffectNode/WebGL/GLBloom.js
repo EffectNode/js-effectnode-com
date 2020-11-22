@@ -9,7 +9,7 @@ export class GLBloom extends EffectNode {
     var params = {
       starBloomBase: 1.5,
 
-      bloomThreshold: 0.7,
+      bloomThreshold: 0.5,
       bloomStrength: 1.2,
       bloomRadius: 0.5
     };
@@ -24,7 +24,7 @@ export class GLBloom extends EffectNode {
     let { renderer, camera, scene } = ctx
     let rect = renderer.domElement.getBoundingClientRect()
 
-    let resolutionScale = 0.5
+    let resolutionScale = 0.7
     let dpi = window.devicePixelRatio || 1.0
     // let rttA = new THREE.WebGLRenderTarget(rect.width, rect.height, { encoding: THREE.sRGBEncoding })
     let rttA = new THREE.WebGLRenderTarget(rect.width * dpi, rect.height * dpi)

@@ -14,11 +14,14 @@ class EN {
       }
     }
   }
+
   static getUndefined () {
   }
+
   static getParent (vm) {
     return vm.parent
   }
+
   static genID () {
     return '_' + Math.random().toString(36).substr(2, 9)
   }
@@ -87,6 +90,7 @@ class EffectNode {
     if (this.isRoot) {
       this.instances = []
     }
+
     this.engine = new MiniEngine({ name: this.name })
     this.children = []
     this.events = new BigMouth()
@@ -104,7 +108,7 @@ class EffectNode {
     let vm = this
 
     if (this.isRoot) {
-      this.services = new Proxy({}, {
+      this.services = new Proxy(this.root.instances, {
         get: (obj, key) => {
           return this.getByName({ name: key })
         },

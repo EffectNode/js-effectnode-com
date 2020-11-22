@@ -24,6 +24,7 @@ export class LanGUI {
     if (window.innerWidth <= 560) {
       folder.close()
     }
+
     ctx.onClean(() => {
       gui.removeFolder(folder)
     })
@@ -33,10 +34,12 @@ export class LanGUI {
     //   let end = kn.split('_')[1]
     //   folder.add({ get [kn] () { return mat.uniforms[start].value[end] }, set [kn] (v) { mat.uniforms[start].value[end] = v } }, kn, min, max)
     // }
+
     // let addNum = (mat, kn, min, max) => {
     //   let start = kn
     //   folder.add({ gets [kn] () { return mat.uniforms[start].value }, set [kn] (v) { mat.uniforms[start].value = v } }, kn, min, max)
     // }
+
     // let addColor = (mat, kn) => {
     //   folder.addColor({ get [kn] () { return '#' + mat.uniforms[kn].value.getHexString() }, set [kn] (v) { mat.uniforms[kn].value.setStyle(v) } }, kn)
     // }
@@ -82,7 +85,7 @@ export class Swimmers {
     this.setupAnimation({ ctx })
     this.setupScene({ ctx })
 
-    new LanGUI({ parent: this, ctx })
+    // new LanGUI({ parent: this, ctx })
   }
 
   prepAnimation ({ ctx }) {
